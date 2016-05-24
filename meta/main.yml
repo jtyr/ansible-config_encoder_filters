@@ -1,0 +1,62 @@
+---
+
+galaxy_info:
+  author: Jiri Tyr
+  description: Config Encoder Filters
+  license: GPLv3
+  min_ansible_version: 1.9
+  platforms:
+    - name: Amazon
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+    - name: EL
+      versions:
+        - all
+    - name: eos
+      versions:
+        - all
+    - name: Fedora
+      versions:
+        - all
+    - name: FreeBSD
+      versions:
+        - all
+    - name: GenericBSD
+      versions:
+        - all
+    - name: GenericLinux
+      versions:
+        - all
+    - name: GenericUNIX
+      versions:
+        - all
+    - name: IOS
+      versions:
+        - all
+    - name: Junos
+      versions:
+        - all
+    - name: NXOS
+      versions:
+        - all
+    - name: opensuse
+      versions:
+        - all
+    - name: SLES
+      versions:
+        - all
+    - name: SmartOS
+      versions:
+        - all
+    - name: Solaris
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - filter
+dependencies: []
