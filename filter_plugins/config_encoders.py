@@ -975,7 +975,10 @@ def encode_yaml(
                     quote=quote,
                     skip_indent=True))
 
-    elif isinstance(data, bool) or (convert_bools and _str_is_bool(data)):
+    elif (
+            data == "null" or
+            isinstance(data, bool) or
+            (convert_bools and _str_is_bool(data))):
         # It's a boolean
 
         rv += "%s\n" % str(data).lower()
