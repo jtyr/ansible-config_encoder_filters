@@ -76,6 +76,14 @@ def _escape(data, quote='"', format=None):
             replace('&', '&amp;').
             replace('<', '&lt;').
             replace('>', '&gt;'))
+    elif format == 'control':
+        return (
+            str(data).
+            replace('\b', '\\b').
+            replace('\f', '\\f').
+            replace('\n', '\\n').
+            replace('\r', '\\r').
+            replace('\t', '\\t'))
     elif quote is not None and len(quote):
         return str(data).replace('\\', '\\\\').replace(quote, "\\%s" % quote)
     else:
@@ -445,7 +453,7 @@ def encode_json(
     elif isinstance(data, basestring):
         # It's a string
 
-        rv += '"%s"' % _escape(data)
+        rv += '"%s"' % _escape(_escape(data), format='control')
 
     else:
         # It's a list
