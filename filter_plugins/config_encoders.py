@@ -376,8 +376,9 @@ def encode_ini(
                     len(item) == 0):
                 item = '""'
 
-            rv += "%s%s%s%s%s\n" % (
-                prop, delimiter, quote, _escape(item, quote), quote)
+            if item is not None:
+                rv += "%s%s%s%s%s\n" % (
+                    prop, delimiter, quote, _escape(item, quote), quote)
 
     # Then process all sections
     for section, props in sorted(data.iteritems()):
