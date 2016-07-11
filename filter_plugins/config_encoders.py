@@ -904,7 +904,16 @@ def encode_xml(
 
                 # Check if the value is text
                 val_not_text = False
-                if isinstance(val, list) or isinstance(val, dict):
+
+                if isinstance(val, list):
+                    # Check if it contains only attributes and a text value
+                    for item in val:
+                        if (
+                                isinstance(item, dict) and
+                                not item.keys()[0].startswith(attribute_sign)):
+                            val_not_text = True
+                            break
+                elif isinstance(val, dict):
                     val_not_text = True
 
                 if val_not_text:

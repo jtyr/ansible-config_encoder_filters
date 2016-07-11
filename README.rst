@@ -962,7 +962,7 @@ data structure is the following::
                   - ^max_uid: 0
               - method:
                 - ^name: list
-                - allow: null
+                - allow: ''
               - method:
                 - ^name: quit
                 - allow:
