@@ -953,8 +953,11 @@ def encode_yaml(
         if len(data.keys()) == 0:
             rv += "{}\n"
         else:
+            i = 0
+
             for key, val in sorted(data.iteritems()):
-                rv += "%s%s:" % ("" if skip_indent else level*indent, key)
+                # Skip indentation only for the first pair
+                rv += "%s%s:" % ("" if i == 0 and skip_indent else level*indent, key)
 
                 if isinstance(val, dict) and len(val.keys()) == 0:
                     rv += " {}\n"
@@ -974,6 +977,8 @@ def encode_yaml(
                         indent=indent,
                         level=level+1,
                         quote=quote)
+
+                i += 1
 
     elif isinstance(data, list):
         # It's a list
