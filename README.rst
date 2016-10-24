@@ -568,7 +568,7 @@ The expected data structure is the following::
     my_logstash_config:
       - :input:
           - :file:
-              path: /tmp/access_log
+              path: /var/log/httpd/access_log
               start_position: beginning
       - :filter:
           - ':if [path] =~ "access"':
@@ -578,10 +578,18 @@ The expected data structure is the following::
               - :grok:
                   match:
                     message: "%{COMBINEDAPACHELOG}"
-      - :date:
-          - match:
-              - timestamp
-              - dd/MMM/yyyy:HH:mm:ss Z
+              - :date:
+                  match:
+                    - timestamp
+                    - dd/MMM/yyyy:HH:mm:ss Z
+          - ':else if [path] =~ "error"':
+              - :mutate:
+                  replace:
+                    type: "apache_error"
+          - :else:
+              - :mutate:
+                  replace:
+                    type: "random_logs"
       - :output:
           - :elasticsearch:
               hosts:
@@ -603,7 +611,7 @@ The output of such template would be::
 
     input {
       file {
-        path => "/tmp/access_log"
+        path => "/var/log/httpd/access_log"
         start_position => "beginning"
       }
     }
@@ -619,13 +627,27 @@ The output of such template would be::
             "message" => "%{COMBINEDAPACHELOG}"
           }
         }
+        date {
+          match => [
+            "timestamp",
+            "dd/MMM/yyyy:HH:mm:ss Z"
+          ]
+        }
       }
-    }
-    date {
-      match => [
-        "timestamp",
-        "dd/MMM/yyyy:HH:mm:ss Z"
-      ]
+      else if [path] =~ "error" {
+        mutate {
+          replace => {
+            "type" => "apache_error"
+          }
+        }
+      }
+      else {
+        mutate {
+          replace => {
+            "type" => "random_logs"
+          }
+        }
+      }
     }
     output {
       elasticsearch {
