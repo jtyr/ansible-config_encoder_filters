@@ -11,6 +11,7 @@ Table of Contents
 - Motivation_
 - Example_
 - Usage_
+- Installation_
 - `Supported encoders`_
     - encode_apache_
     - encode_erlang_
@@ -175,6 +176,12 @@ The usage directy from a Playbook requires to add the
           template:
             src: my.conf.j2
             dest: /tmp/my.conf
+
+
+.. _Installation:
+
+Installation
+------------
 
 The role can be downloaded either directly from GitHub::
 
