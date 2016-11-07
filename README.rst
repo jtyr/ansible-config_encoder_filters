@@ -183,7 +183,11 @@ The usage directy from a Playbook requires to add the
 Installation
 ------------
 
-The role can be downloaded either via Ansible Gallaxy requirements file::
+The role can be downloaded either via Ansible Galaxy command::
+
+    $ ansible-galaxy install jtyr.config_encoder_filters,master,config_encoder_filters
+
+or via Ansible Gallaxy requirements file::
 
     $ cat ./requirements.yaml
     ---
@@ -192,12 +196,7 @@ The role can be downloaded either via Ansible Gallaxy requirements file::
       name: config_encoder_filters
     $ ansible-galaxy -r ./requirements.yaml
 
-or via Ansible Galaxy command only::
-
-    $ ansible-galaxy install jtyr.config_encoder_filters
-    $ mv jtyr.config_encoder_filters config_encoder_filters
-
-or directly via Git::
+or via Git::
 
     $ git clone https://github.com/jtyr/ansible-config_encoder_filters.git config_encoder_filters
 
