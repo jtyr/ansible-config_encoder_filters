@@ -606,7 +606,7 @@ def encode_logstash(
     return rv
 
 
-def encode_nginx(data, indent="  ", level=0):
+def encode_nginx(data, indent="  ", level=0, block_semicolon=False):
     """Convert Python data structure to Nginx format."""
 
     # Return value
@@ -621,8 +621,11 @@ def encode_nginx(data, indent="  ", level=0):
                 rv += "\n"
 
             rv += "%s%s {\n" % (level*indent, item.keys()[0])
-            rv += encode_nginx(item.values()[0], level=level+1)
-            rv += "%s}\n" % (level*indent)
+            rv += encode_nginx(
+                item.values()[0],
+                level=level+1,
+                block_semicolon=block_semicolon)
+            rv += "%s}%s\n" % (level*indent, ';' if block_semicolon else '')
 
             item_type = 'section'
 

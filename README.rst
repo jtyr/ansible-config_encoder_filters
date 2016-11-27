@@ -761,6 +761,10 @@ The filter can have the following parameters:
   indenting from the beginning of the line. Setting the value to higher
   than ``0`` indents the content by ``indent * level``.
 
+- ``block_semicolon=false``
+
+  Allows to add a semicolon to the end of each block.
+
 
 .. _encode-pam:
 
