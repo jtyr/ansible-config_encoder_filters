@@ -492,6 +492,10 @@ The filter can have the following parameters:
   Sign separating the *property* and the *value*. By default it's set to
   ``'='`` but it can also be set for example to ``' = '``.
 
+- ``indent=""``
+
+  Indent the keys with the specified string. E.g. ``indent="\t"``.
+
 - ``quote=""``
 
   Sets the quoting of the value. Use ``quote="'"`` or ``quote='"'``.

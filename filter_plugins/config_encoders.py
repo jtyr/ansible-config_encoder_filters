@@ -27,6 +27,13 @@ from copy import copy
 import re
 
 
+# Required for Python 3 compatibility
+try:
+    basestring
+except NameError:
+    basestring = str
+
+
 def _str_is_bool(data):
     """Verify if data is boolean."""
 
@@ -350,8 +357,8 @@ def encode_haproxy(data, indent="  "):
 
 
 def encode_ini(
-        data, comment="#", delimiter="=", quote="", section_is_comment=False,
-        ucase_prop=False):
+        data, comment="#", delimiter="=", indent="", quote="",
+        section_is_comment=False, ucase_prop=False):
     """Convert Python data structure to INI format."""
 
     # Return value
@@ -377,8 +384,9 @@ def encode_ini(
                 item = '""'
 
             if item is not None:
-                rv += "%s%s%s%s%s\n" % (
-                    prop, delimiter, quote, _escape(item, quote), quote)
+                rv += "%s%s%s%s%s%s\n" % (
+                    indent, prop, delimiter, quote, _escape(item, quote),
+                    quote)
 
     # Then process all sections
     for section, props in sorted(data.iteritems()):
@@ -395,6 +403,7 @@ def encode_ini(
             rv += encode_ini(
                 props,
                 delimiter=delimiter,
+                indent=indent,
                 quote=quote,
                 section_is_comment=section_is_comment,
                 ucase_prop=ucase_prop)
@@ -958,7 +967,8 @@ def encode_yaml(
         else:
             for i, (key, val) in enumerate(sorted(data.iteritems())):
                 # Skip indentation only for the first pair
-                rv += "%s%s:" % ("" if i == 0 and skip_indent else level*indent, key)
+                rv += "%s%s:" % (
+                    "" if i == 0 and skip_indent else level*indent, key)
 
                 if isinstance(val, dict) and len(val.keys()) == 0:
                     rv += " {}\n"
