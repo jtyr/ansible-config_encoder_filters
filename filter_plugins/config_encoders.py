@@ -530,6 +530,7 @@ def encode_logstash(
                             _is_num(val) or
                             isinstance(val, bool) or (
                                 isinstance(val, dict) and
+                                val and
                                 val.keys()[0][0] != section_prefix)):
                         rv += "\n%s}\n" % (indent * level)
                     else:
