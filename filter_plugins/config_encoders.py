@@ -735,11 +735,14 @@ def encode_toml(
                     isinstance(val, basestring) or
                     _is_num(val) or
                     isinstance(val, bool) or (
-                        isinstance(val, list) and
-                        len(val) > 0 and
-                        not isinstance(val[0], dict))):
+                        (
+                            isinstance(val, list) and
+                            len(val) == 0
+                        ) or (
+                            isinstance(val, list) and
+                            len(val) > 0 and
+                            not isinstance(val[0], dict)))):
                 # The value is string, number, boolean or list
-
                 rv += "%s%s = " % (indent * level, key)
                 rv += encode_toml(
                     val,
@@ -755,8 +758,10 @@ def encode_toml(
         # Then process all data structures
         for key, val in sorted(data.iteritems()):
             if (
-                    isinstance(val, dict) or
-                    isinstance(val, list) and isinstance(val[0], dict)):
+                    isinstance(val, dict) or (
+                      isinstance(val, list) and
+                      len(val) > 0 and
+                      isinstance(val[0], dict))):
 
                 # Values for the next recursive call
                 tmp_prevkey = prevkey
@@ -826,7 +831,7 @@ def encode_toml(
     else:
         # It's a list
 
-        if isinstance(data[0], dict):
+        if len(data) > 0 and isinstance(data[0], dict):
             for d in data:
                 rv += "\n%s[[%s]]\n" % (indent * level, prevkey)
                 rv += encode_toml(
@@ -849,7 +854,7 @@ def encode_toml(
                     level=level,
                     prevtype='list')
 
-                # Last item of the loop
+                # Don't make comma after the last item of the loop
                 if data[-1] != d:
                     rv += ", "
 
