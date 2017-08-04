@@ -238,7 +238,7 @@ def encode_apache(
 
 def encode_erlang(
         data, atom_value_indicator=":", convert_bools=False,
-        convert_nums=False, indent="  ", level=0):
+        convert_nums=False, indent="  ", level=0, ordered_tuple_indicator=":"):
     """Convert Python data structure to Erlang format."""
 
     # Return value
@@ -250,17 +250,36 @@ def encode_erlang(
         rv += "\n"
 
         for key, val in sorted(data.iteritems()):
-            rv += "%s{%s," % (indent*level, key)
+            if key == ordered_tuple_indicator:
+                rv += "%s{" % (indent*level)
 
-            if not isinstance(val, dict):
-                rv += " "
+                if isinstance(val, list):
+                    for i, v in enumerate(val):
+                        rv += encode_erlang(
+                            v,
+                            atom_value_indicator=atom_value_indicator,
+                            convert_bools=convert_bools,
+                            convert_nums=convert_nums,
+                            indent=indent,
+                            level=level+1,
+                            ordered_tuple_indicator=ordered_tuple_indicator)
 
-            rv += encode_erlang(
-                val,
-                convert_bools=convert_bools,
-                convert_nums=convert_nums,
-                indent=indent,
-                level=level+1)
+                        if i+1 < len(val):
+                            rv += ", "
+            else:
+                rv += "%s{%s," % (indent*level, key)
+
+                if not isinstance(val, dict):
+                    rv += " "
+
+                rv += encode_erlang(
+                    val,
+                    atom_value_indicator=atom_value_indicator,
+                    convert_bools=convert_bools,
+                    convert_nums=convert_nums,
+                    indent=indent,
+                    level=level+1,
+                    ordered_tuple_indicator=ordered_tuple_indicator)
 
             rv += "}"
     elif (
@@ -300,10 +319,12 @@ def encode_erlang(
 
             rv += encode_erlang(
                 val,
+                atom_value_indicator=atom_value_indicator,
                 convert_bools=convert_bools,
                 convert_nums=convert_nums,
                 indent=indent,
-                level=level+1)
+                level=level+1,
+                ordered_tuple_indicator=ordered_tuple_indicator)
 
             if data[-1] == val:
                 # Last item of the loop
@@ -735,13 +756,11 @@ def encode_toml(
                     isinstance(val, basestring) or
                     _is_num(val) or
                     isinstance(val, bool) or (
-                        (
-                            isinstance(val, list) and
+                        isinstance(val, list) and (
                             len(val) == 0
-                        ) or (
-                            isinstance(val, list) and
-                            len(val) > 0 and
-                            not isinstance(val[0], dict)))):
+                            or (
+                                len(val) > 0 and
+                                not isinstance(val[0], dict))))):
                 # The value is string, number, boolean or list
                 rv += "%s%s = " % (indent * level, key)
                 rv += encode_toml(
@@ -1002,7 +1021,10 @@ def encode_yaml(
             rv += "[]\n"
         else:
             for item in data:
-                list_indent = "%s- " % (level*indent)
+                if isinstance(item, list):
+                    list_indent = "%s-\n" % (level*indent)
+                else:
+                    list_indent = "%s- " % (level*indent)
 
                 rv += "%s%s" % (list_indent, encode_yaml(
                     item,

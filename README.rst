@@ -314,11 +314,20 @@ expected data structure is the following::
           - keyfile: /path/to/server/key.pem
           - verify: verify_peer
           - fail_if_no_peer_cert: true
+        - cluster_nodes:
+            ::
+              -
+                - node1
+                - node2
+              - :disc
 
 The variable consists of a lists of dictionaries. The value of the key-value
 pair can be another list or simple value like a string or a number. Erlang
 tuples can be enforced by prepending the value with the special character
-specified in the ``atom_value_indicator``.
+specified in the ``atom_value_indicator``. Order in tuple can be achieved by
+using special construction as shown for the ``cluste_nodes`` tuple from the
+above example. The indicator starting this special construction can be set with
+the parameter ``ordered_tuple_indicator``.
 
 The above variable can be used in the template file like this::
 
@@ -340,7 +349,9 @@ The output of such template would be::
               {keyfile, "/path/to/server/key.pem"},
               {verify, "verify_peer"},
               {fail_if_no_peer_cert, true}
-          ]}
+          ]},
+          {cluster_nodes,
+            {['node1', 'node2'], disc}}
       ]}
     ].
 
@@ -377,6 +388,10 @@ The filter can have the following parameters:
   Indicates the initial level of the indentation. Value ``0`` starts
   indenting from the beginning of the line. Setting the value to higher
   than ``0`` indents the content by ``indent * level``.
+
+- ``ordered_tuple_indicator=":"``
+
+  Indicator used to start the special construction with ordered tuple.
 
 
 .. _encode-haproxy:
