@@ -26,6 +26,7 @@ Table of Contents
     - encode_yaml_
 - Utilities_
     - template_replace_
+- Testing_
 - License_
 - Author_
 
@@ -1288,6 +1289,24 @@ And the result of such usage is the following::
       Job Retention = 3 months;
       AutoPrune = yes;
     }
+
+
+.. _Testing:
+
+Testing
+-------
+
+All encoders have a set of unit tests. Full test can be executed like this:
+
+    $ python2 -m unittest tests.test_config_encoders
+
+Individual encoder can be tested like this:
+
+    $ python2 -m unittest tests.test_config_encoders.TestYaml
+
+Individual tests can be executed like this:
+
+    $ python2 -m unittest tests.test_config_encoders.TestYaml.test_string
 
 
 .. _License:

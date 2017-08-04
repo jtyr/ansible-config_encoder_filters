@@ -1,0 +1,11 @@
+encode_yaml_lists_var1:
+  - "aaa"
+  - 123
+encode_yaml_lists_var2:
+  - "aaa"
+  - bbb:
+      ccc: "ddd"
+      eee:
+        - "fff"
+        - ggg: "hhh"
+        - bool: true

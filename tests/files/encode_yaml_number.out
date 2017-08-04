@@ -1,0 +1,8 @@
+encode_yaml_numbers_var1: 123
+encode_yaml_numbers_var2: -987
+encode_yaml_numbers_var3: 123.456
+encode_yaml_numbers_var4: -987.654
+encode_yaml_numbers_var5: "123"
+encode_yaml_numbers_var6: "-987"
+encode_yaml_numbers_var7: "123.456"
+encode_yaml_numbers_var8: "-987.654"
