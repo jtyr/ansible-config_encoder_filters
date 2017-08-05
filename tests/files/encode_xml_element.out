@@ -1,0 +1,6 @@
+<encode_xml_element>
+  <element1>
+    <element2 />
+    <element3>some text</element3>
+  </element1>
+</encode_xml_element>

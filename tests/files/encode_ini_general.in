@@ -1,0 +1,8 @@
+---
+
+encode_ini_general_var1: some text
+encode_ini_general_var2: 123
+encode_ini_general_var3: 987.654
+encode_ini_general_var4:
+  - yes
+  - "false"

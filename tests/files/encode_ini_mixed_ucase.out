@@ -1,0 +1,9 @@
+ENCODE_INI_MIXED_VAR1=some text
+ENCODE_INI_MIXED_VAR2=123
+
+[encode_ini_mixed_section1]
+VAR3=987.654
+
+[encode_ini_mixed_section2]
+VAR4=True
+VAR5=false

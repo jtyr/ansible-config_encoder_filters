@@ -1308,6 +1308,11 @@ Individual tests can be executed like this:
 
     $ python2 -m unittest tests.test_config_encoders.TestYaml.test_string
 
+Tests are great source of advanced examples of how to use each of the encoders.
+Explore them in the directory ``tests/files``. The output in the ``.out`` files
+might depend on additional parameters used in the
+``tests/test_config_encoders.py`` file.
+
 
 .. _License:
 

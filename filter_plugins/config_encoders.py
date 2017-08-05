@@ -770,7 +770,8 @@ def encode_toml(
                     first=first,
                     indent=indent,
                     level=level,
-                    prevkey=prevkey)
+                    prevkey=prevkey,
+                    quote=quote)
 
                 first = False
 
@@ -822,7 +823,8 @@ def encode_toml(
                     first=first,
                     indent=indent,
                     level=tmp_level,
-                    prevkey=tmp_prevkey)
+                    prevkey=tmp_prevkey,
+                    quote=quote)
 
                 first = False
 
@@ -859,7 +861,8 @@ def encode_toml(
                     convert_nums=convert_nums,
                     first=first,
                     indent=indent,
-                    level=level)
+                    level=level,
+                    quote=quote)
         else:
             rv += "["
 
@@ -871,7 +874,8 @@ def encode_toml(
                     first=first,
                     indent=indent,
                     level=level,
-                    prevtype='list')
+                    prevtype='list',
+                    quote=quote)
 
                 # Don't make comma after the last item of the loop
                 if data[-1] != d:

@@ -1,0 +1,2 @@
+encode_yaml_string_var1 = 'my string'
+encode_yaml_string_var2 = 'my\' "string"'

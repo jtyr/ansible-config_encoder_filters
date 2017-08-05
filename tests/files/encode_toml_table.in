@@ -1,0 +1,9 @@
+---
+
+encode_toml_table_tab1:
+  text: some text
+  arr11:
+    - 123
+    - 987.654
+  bool1: yes
+  bool2: "false"
