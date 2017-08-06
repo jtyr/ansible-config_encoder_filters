@@ -1,6 +1,4 @@
----
-
-encode_toml_array_arr1:
+arr1:
   - some text
   -
     - 123

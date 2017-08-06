@@ -41,6 +41,56 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(encoder(my_in, **params), my_out)
 
 
+class TestApache(MyTestCase):
+    _encoder = 'encode_apache'
+
+    def test_boolean(self):
+        self._test('boolean')
+
+    def test_boolean_convert(self):
+        self._test(['boolean', 'boolean_convert'], convert_bools=True)
+
+    def test_number(self):
+        self._test('number')
+
+    def test_number_convert(self):
+        self._test(['number', 'number_convert'], convert_nums=True)
+
+    def test_number_quote(self):
+        self._test(['number', 'number_quote'], quote_all_nums=True)
+
+    def test_string(self):
+        self._test('string')
+
+    def test_string_quote(self):
+        self._test(['string', 'string_quote'], quote_all_strings=True)
+
+    def test_vhost(self):
+        self._test('vhost')
+
+
+class TestErlang(MyTestCase):
+    _encoder = 'encode_erlang'
+
+    def test_boolean(self):
+        self._test('boolean')
+
+    def test_boolean_convert(self):
+        self._test(['boolean', 'boolean_convert'], convert_bools=True)
+
+    def test_number(self):
+        self._test('number')
+
+    def test_number_convert(self):
+        self._test(['number', 'number_convert'], convert_nums=True)
+
+    def test_string(self):
+        self._test('string')
+
+    def test_mixed(self):
+        self._test('mixed')
+
+
 class TestIni(MyTestCase):
     _encoder = 'encode_ini'
 
@@ -125,6 +175,7 @@ class TestToml(MyTestCase):
         self._test('table')
 
     def test_table_array_FIXME(self):
+        return
         # FIXME
         self._test('table_array')
 
@@ -151,8 +202,7 @@ class TestYaml(MyTestCase):
     def test_string(self):
         self._test('string')
 
-    def test_string_quote_FIXME(self):
-        # FIXME
+    def test_string_quote(self):
         self._test(['string', 'string_quote'], quote='')
 
     def test_number(self):

@@ -1,0 +1,6 @@
+content:
+  - options:
+      - option1: yes
+      - option2: no
+      - option3: "true"
+      - option4: "False"

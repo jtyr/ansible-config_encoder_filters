@@ -1,11 +1,9 @@
----
+var1: some text
+var2: 123
 
-encode_ini_mixed_var1: some text
-encode_ini_mixed_var2: 123
-
-encode_ini_mixed_section1:
+section1:
   var3: 987.654
 
-encode_ini_mixed_section2:
+section2:
   var4: yes
   var5: "false"

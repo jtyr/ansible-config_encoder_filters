@@ -1,9 +1,9 @@
 {
-    "encode_yaml_lists_var1": [
+    "var1": [
         "aaa",
         123
     ],
-    "encode_yaml_lists_var2": [
+    "var2": [
         "aaa",
         {
             "bbb": {

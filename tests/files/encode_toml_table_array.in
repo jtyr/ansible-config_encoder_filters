@@ -1,6 +1,4 @@
----
-
-encode_toml_table_array_arr1:
+array_arr1:
   - text: some text
     arr11:
       - 123
@@ -8,7 +6,7 @@ encode_toml_table_array_arr1:
   - bool1: yes
     bool2: "false"
 
-encode_toml_table_array_arr2:
+array_arr2:
   products:
     - name: Hammer
       sku: 738594937
@@ -17,7 +15,7 @@ encode_toml_table_array_arr2:
       sku: 284758393
       color: gray
 
-encode_toml_table_array_arr3:
+array_arr3:
   fruit:
     - name: apple
       physical:

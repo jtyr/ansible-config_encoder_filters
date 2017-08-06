@@ -1,6 +1,4 @@
----
-
-encode_xml_element:
+element:
   - element1:
     - element2: ''
     - element3: some text

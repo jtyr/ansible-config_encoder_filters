@@ -1,0 +1,33 @@
+---
+
+- name: Load input file for {{ item.encoder }}_{{ item.out | default(item.in) }}
+  include_vars:
+    file: files/{{ item.encoder }}_{{ item.in }}.in
+    name: myinput
+
+- name: Comparison for {{ item.encoder }}_{{ item.out | default(item.in) }}
+  assert:
+    that: >
+      {{ (
+        myinput | encode_apache(**item.params | default({}))
+          if item.encoder == 'encode_apache' else
+        myinput | encode_erlang(**item.params | default({}))
+          if item.encoder == 'encode_erlang' else
+        myinput | encode_haproxy(**item.params | default({}))
+          if item.encoder == 'encode_haproxy' else
+        myinput | encode_ini(**item.params | default({}))
+          if item.encoder == 'encode_ini' else
+        myinput | encode_json(**item.params | default({}))
+          if item.encoder == 'encode_json' else
+        myinput | encode_logstash(**item.params | default({}))
+          if item.encoder == 'encode_logstash' else
+        myinput | encode_nginx(**item.params | default({}))
+          if item.encoder == 'encode_nginx' else
+        myinput | encode_pam(**item.params | default({}))
+          if item.encoder == 'encode_pam' else
+        myinput | encode_toml(**item.params | default({}))
+          if item.encoder == 'encode_toml' else
+        myinput | encode_xml(**item.params | default({}))
+          if item.encoder == 'encode_xml' else
+        myinput | encode_yaml(**item.params | default({}))
+      ) }} == {{ lookup('file', 'files/{{ item.encoder }}_{{ item.out | default(item.in) }}.out') }}

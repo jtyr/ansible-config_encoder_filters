@@ -1,0 +1,7 @@
+[
+  {var1, "some_text"},
+  {var2, "some text"},
+  {var3, "some 'text'"},
+  {var4, "some \"text\""},
+  {var5, "some \"text\""}
+].

@@ -1,4 +1,4 @@
-encode_yaml_dicts_var1:
+var1:
   aaa: "bbb"
   ccc: 123
   ddd: true

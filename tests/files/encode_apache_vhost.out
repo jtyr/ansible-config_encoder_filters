@@ -1,0 +1,7 @@
+<VirtualHost *:80>
+  DocumentRoot /www/example1
+  ServerName www.example.com
+  ErrorLog /var/log/httpd/www.example.com-error_log
+  CustomLog /var/log/httpd/www.example.com-access_log common
+  # "Other directives here ..."
+</VirtualHost>

@@ -1,6 +1,4 @@
----
-
-encode_xml_element:
+element:
   - ^attr1: val1
   - element1:
     - ^attr3: val3

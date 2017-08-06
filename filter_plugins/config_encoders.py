@@ -197,6 +197,7 @@ def encode_apache(
                 _is_num(data) or
                 (convert_nums and _str_is_num(data))):
             # Value is a number
+
             if quote_all_nums:
                 rv += '"%s"' % data
             else:

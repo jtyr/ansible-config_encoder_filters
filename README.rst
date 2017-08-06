@@ -352,7 +352,10 @@ The output of such template would be::
               {fail_if_no_peer_cert, true}
           ]},
           {cluster_nodes,
-            {['node1', 'node2'], disc}}
+            {[
+              "node1",
+              "node2"
+            ], disc}}
       ]}
     ].
 
@@ -1309,9 +1312,13 @@ Individual tests can be executed like this:
     $ python2 -m unittest tests.test_config_encoders.TestYaml.test_string
 
 Tests are great source of advanced examples of how to use each of the encoders.
-Explore them in the directory ``tests/files``. The output in the ``.out`` files
-might depend on additional parameters used in the
-``tests/test_config_encoders.py`` file.
+Explore them in the directory ``tests/files``. The content of the ``.in`` files
+must be assigned to a variable when using in Ansible. The output in the
+``.out`` files might depend on additional parameters used in the
+``tests/test_config_encoders.py`` file. Testing via Ansible can be executed
+like this:
+
+    $ ansible-playbook -i localhost, tests/test_config_encoders.yaml
 
 
 .. _License:

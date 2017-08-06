@@ -1,8 +1,8 @@
-[encode_ini_section_section1]
+[section1]
 var1=some text
 var2=123
 var3=987.654
 
-[encode_ini_section_section2]
+[section2]
 var4=True
 var5=false

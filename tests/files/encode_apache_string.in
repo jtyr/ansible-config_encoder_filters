@@ -1,0 +1,7 @@
+content:
+  - options:
+      - option1: some_text
+      - option2: some text
+      - option3: "some 'text'"
+      - option4: 'some "text"'
+      - option5: "some \"text\""

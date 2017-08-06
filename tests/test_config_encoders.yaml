@@ -1,0 +1,102 @@
+---
+
+- hosts: all
+  connection: local
+  gather_facts: no
+  vars:
+    # Not working tests! ;o(
+    xtests:
+      # Apache
+      - encoder: encode_apache
+        in: boolean
+      - encoder: encode_apache
+        in: boolean
+        out: boolean_convert
+        params:
+          convert_bools: yes
+      - encoder: encode_apache
+        in: boolean
+        out: boolean_convert
+        params:
+          convert_bools: yes
+      - encoder: encode_apache
+        in: number
+      - encoder: encode_apache
+        in: number
+        out: number_convert
+        params:
+          convert_nums: yes
+      - encoder: encode_apache
+        in: number
+        out: number_quote
+        params:
+          quote_all_nums: yes
+      - encoder: encode_apache
+        in: string
+      - encoder: encode_apache
+        in: string
+        out: string_quote
+        params:
+          quote_all_strings: yes
+      - encoder: encode_apache
+        in: vhost
+      # YAML
+      - encoder: encode_yaml
+        in: boolean
+      - encoder: encode_yaml
+        in: boolean
+        out: boolean_convert
+        params:
+          convert_bools: yes
+      - encoder: encode_yaml
+        in: string
+      - encoder: encode_yaml
+        in: number
+      - encoder: encode_yaml
+        in: number
+        out: number_convert
+        params:
+          convert_nums: yes
+      - encoder: encode_yaml
+        in: list
+      - encoder: encode_yaml
+        in: list
+        out: list_indent
+        params:
+          indent: "    "
+      - encoder: encode_yaml
+        in: dict
+
+    # Working tests
+    tests:
+      # JSON
+      - encoder: encode_json
+        in: boolean
+      - encoder: encode_json
+        in: boolean
+        out: boolean_convert
+        params:
+          convert_bools: yes
+      - encoder: encode_json
+        in: string
+      - encoder: encode_json
+        in: number
+      - encoder: encode_json
+        in: number
+        out: number_convert
+        params:
+          convert_nums: yes
+      - encoder: encode_json
+        in: list
+      - encoder: encode_json
+        in: list
+        out: list_indent
+        params:
+          indent: "    "
+      - encoder: encode_json
+        in: dict
+  roles:
+    - config_encoder_filters
+  tasks:
+    - include: test_config_encoders.include
+      with_items: "{{ tests }}"

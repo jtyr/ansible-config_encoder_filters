@@ -1,6 +1,4 @@
----
-
-encode_toml_table_tab1:
+tab1:
   text: some text
   arr11:
     - 123
