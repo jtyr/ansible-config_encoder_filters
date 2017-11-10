@@ -1,0 +1,16 @@
+---
+
+language: python
+
+python:
+  - 2.7
+
+matrix:
+  fast_finish: true
+
+script:
+  - pip install ansible
+  - python2 -m unittest -v tests.test_config_encoders
+
+notifications:
+  email: false

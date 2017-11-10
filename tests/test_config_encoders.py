@@ -72,6 +72,9 @@ class TestApache(MyTestCase):
 class TestErlang(MyTestCase):
     _encoder = 'encode_erlang'
 
+    def test_atom(self):
+        self._test('atom')
+
     def test_boolean(self):
         self._test('boolean')
 

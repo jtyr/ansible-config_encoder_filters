@@ -4,6 +4,9 @@ Config Encoder Filters
 This is an Ansible role used to deliver the Config Encoder Filters as
 a dependency of another Ansible role.
 
+.. image:: https://travis-ci.org/jtyr/ansible-config_encoder_filters.svg?branch=master
+    :target: https://travis-ci.org/jtyr/ansible-config_encoder_filters
+
 
 Table of Contents
 -----------------
@@ -313,7 +316,7 @@ expected data structure is the following::
           - cacertfile: /path/to/testca/cacert.pem
           - certfile: /path/to/server/cert.pem
           - keyfile: /path/to/server/key.pem
-          - verify: verify_peer
+          - verify: :verify_peer
           - fail_if_no_peer_cert: true
         - cluster_nodes:
             ::
@@ -348,7 +351,7 @@ The output of such template would be::
               {cacertfile, "/path/to/testca/cacert.pem"},
               {certfile, "/path/to/server/cert.pem"},
               {keyfile, "/path/to/server/key.pem"},
-              {verify, "verify_peer"},
+              {verify, verify_peer},
               {fail_if_no_peer_cert, true}
           ]},
           {cluster_nodes,
