@@ -177,10 +177,11 @@ class TestToml(MyTestCase):
     def test_table(self):
         self._test('table')
 
-    def test_table_array_FIXME(self):
-        return
-        # FIXME
+    def test_table_array(self):
         self._test('table_array')
+
+    def test_table_grafana(self):
+        self._test('table_grafana')
 
 
 class TestXml(MyTestCase):

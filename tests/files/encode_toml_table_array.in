@@ -1,29 +1,19 @@
-array_arr1:
-  - text: some text
-    arr11:
-      - 123
-      - 987.654
-  - bool1: yes
-    bool2: "false"
+products:
+  - name: Hammer
+    sku: 738594937
+  - {}
+  - name: Nail
+    sku: 284758393
+    color: gray
 
-array_arr2:
-  products:
-    - name: Hammer
-      sku: 738594937
-    - {}
-    - name: Nail
-      sku: 284758393
-      color: gray
-
-array_arr3:
-  fruit:
-    - name: apple
-      physical:
-        color: red
-        shape: round
-      variety:
-        - name: red delicious
-        - name: granny smith
-    - name: banana
-      variety:
-        - name: plantain
+fruit:
+  - name: apple
+    physical:
+      color: red
+      shape: round
+    variety:
+      - name: red delicious
+      - name: granny smith
+  - name: banana
+    variety:
+      - name: plantain

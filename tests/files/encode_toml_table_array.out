@@ -1,10 +1,21 @@
-[[array_arr1]]
-arr11 = [123, 987.654]
-text = "some text"
+[[fruit]]
+name = "apple"
 
-[[array_arr1]]
-bool1 = true
-bool2 = "false"
+[fruit.physical]
+color = "red"
+shape = "round"
+
+[[fruit.variety]]
+name = "red delicious"
+
+[[fruit.variety]]
+name = "granny smith"
+
+[[fruit]]
+name = "banana"
+
+[[fruit.variety]]
+name = "plantain"
 
 [[products]]
 name = "Hammer"
@@ -13,27 +24,6 @@ sku = 738594937
 [[products]]
 
 [[products]]
+color = "gray"
 name = "Nail"
 sku = 284758393
-color = "gray"
-
-[[array_arr3]]
-
-  [[fruit]]
-  name = "apple"
-
-    ["fruit.physical"]
-    color = "red"
-    shape = "round"
-
-    [["fruit.variety"]]
-    name = "red delicious"
-
-    [["fruit.variety"]]
-    name = "granny smith"
-
-  [[fruit]]
-  name = "banana"
-
-    [["fruit.variety"]]
-    name = "plantain"

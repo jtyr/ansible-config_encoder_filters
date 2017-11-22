@@ -910,26 +910,27 @@ expected data structure is the following::
       servers:
         - host: 127.0.0.1
           port: 389
-          use_ssl: false
-          ssl_skip_verify: false
+          use_ssl: no
+          start_tls: no
+          ssl_skip_verify: no
           bind_dn: cn=admin,dc=grafana,dc=org
           bind_password: grafana
-          search_filter: "(cn=%s)"
+          search_filter: (cn=%s)
           search_base_dns:
             - dc=grafana,dc=org
-      servers.attributes:
-        name: givenName
-        surname: sn
-        username: cn
-        member_of: memberOf
-        email: email
-      servers.group_mappings:
-        - group_dn: cn=admins,dc=grafana,dc=org
-          org_role: Admin
-        - group_dn: cn=users,dc=grafana,dc=org
-          org_role: Editor
-        - group_dn: "*"
-          org_role: Viewer
+        - attributes:
+            name: givenName
+            surname: sn
+            username: cn
+            member_of: memberOf
+            email: email
+        - group_mappings:
+            - group_dn: cn=admins,dc=grafana,dc=org
+              org_role: Admin
+            - group_dn: cn=users,dc=grafana,dc=org
+              org_role: Editor
+            - group_dn: "*"
+              org_role: Viewer
 
 The variable is a dictionary of which value can be either a simple type
 (number, string, boolean), list or another dictionary. The dictionaries
@@ -943,34 +944,35 @@ The output of such template would be::
 
     verbose_logging = false
 
-      [[servers]]
-      bind_dn = "cn=admin,dc=grafana,dc=org"
-      bind_password = "grafana"
-      host = "127.0.0.1"
-      port = 389
-      search_base_dns = ["dc=grafana,dc=org"]
-      search_filter = "(cn=%s)"
-      ssl_skip_verify = false
-      use_ssl = false
+    [[servers]]
+    host = "127.0.0.1"
+    port = 389
+    use_ssl = false
+    start_tls = false
+    ssl_skip_verify = false
+    bind_dn = "cn=admin,dc=grafana,dc=org"
+    bind_password = 'grafana'
+    search_filter = "(cn=%s)"
+    search_base_dns = ["dc=grafana,dc=org"]
 
     [servers.attributes]
-    email = "email"
-    member_of = "memberOf"
     name = "givenName"
     surname = "sn"
     username = "cn"
+    member_of = "memberOf"
+    email =  "email"
 
-      [[servers.group_mappings]]
-      group_dn = "cn=admins,dc=grafana,dc=org"
-      org_role = "Admin"
+    [[servers.group_mappings]]
+    group_dn = "cn=admins,dc=grafana,dc=org"
+    org_role = "Admin"
 
-      [[servers.group_mappings]]
-      group_dn = "cn=users,dc=grafana,dc=org"
-      org_role = "Editor"
+    [[servers.group_mappings]]
+    group_dn = "cn=users,dc=grafana,dc=org"
+    org_role = "Editor"
 
-      [[servers.group_mappings]]
-      group_dn = "*"
-      org_role = "Viewer"
+    [[servers.group_mappings]]
+    group_dn = "*"
+    org_role = "Viewer"
 
 The filter can have the following parameters:
 
@@ -990,16 +992,6 @@ The filter can have the following parameters:
   number like it would be defined like ``var1: 123``. It's also possible
   to use the YAML type casting to convert string to number (e.g. ``!!int
   "1234"``, ``!!float "3.14"``).
-
-- ``indent="  "``
-
-  Defines the indentation unit.
-
-- ``level=0``
-
-  Indicates the initial level of the indentation. Value ``0`` starts
-  indenting from the beginning of the line. Setting the value to higher
-  than ``0`` indents the content by ``indent * level``.
 
 - ``quote='"'``
 

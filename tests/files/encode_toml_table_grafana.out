@@ -1,0 +1,31 @@
+verbose_logging = false
+
+[[servers]]
+bind_dn = "cn=admin,dc=grafana,dc=org"
+bind_password = "grafana"
+host = "127.0.0.1"
+port = 389
+search_base_dns = ["dc=grafana,dc=org"]
+search_filter = "(cn=%s)"
+ssl_skip_verify = false
+start_tls = false
+use_ssl = false
+
+[servers.attributes]
+email = "email"
+member_of = "memberOf"
+name = "givenName"
+surname = "sn"
+username = "cn"
+
+[[servers.group_mappings]]
+group_dn = "cn=admins,dc=grafana,dc=org"
+org_role = "Admin"
+
+[[servers.group_mappings]]
+group_dn = "cn=users,dc=grafana,dc=org"
+org_role = "Editor"
+
+[[servers.group_mappings]]
+group_dn = "*"
+org_role = "Viewer"

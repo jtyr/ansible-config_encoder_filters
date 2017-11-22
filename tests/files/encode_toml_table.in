@@ -1,7 +1,14 @@
-tab1:
-  text: some text
-  arr11:
-    - 123
-    - 987.654
-  bool1: yes
-  bool2: "false"
+table-1:
+  key1: some string
+  key2: 123
+
+dog:
+  tater.man:
+    type: pug
+
+x:
+  y:
+    aaa: bbb
+    z:
+      w:
+        name: deep table

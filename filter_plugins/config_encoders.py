@@ -741,8 +741,8 @@ def encode_pam(
 
 
 def encode_toml(
-        data, convert_bools=False, convert_nums=False, first=True,
-        indent="  ", level=0, prevkey="", prevtype="", quote='"'):
+        data, convert_bools=False, convert_nums=False, first=True, quote='"',
+        table_name="", table_type=None):
     """Convert Python data structure to TOML format."""
 
     # Return value
@@ -751,83 +751,146 @@ def encode_toml(
     if isinstance(data, dict):
         # It's a dict
 
-        # First process all standalone strings, numbers, booleans and lists
-        for key, val in sorted(data.iteritems()):
-            if (
-                    isinstance(val, basestring) or
-                    _is_num(val) or
-                    isinstance(val, bool) or (
-                        isinstance(val, list) and (
-                            len(val) == 0
-                            or (
-                                len(val) > 0 and
-                                not isinstance(val[0], dict))))):
-                # The value is string, number, boolean or list
-                rv += "%s%s = " % (indent * level, key)
-                rv += encode_toml(
-                    val,
-                    convert_bools=convert_bools,
-                    convert_nums=convert_nums,
-                    first=first,
-                    indent=indent,
-                    level=level,
-                    prevkey=prevkey,
-                    quote=quote)
+        tn = table_name
 
-                first = False
+        # First process all keys with elementar value (num/str/bool/array)
+        for k, v in sorted(data.iteritems()):
 
-        # Then process all data structures
-        for key, val in sorted(data.iteritems()):
-            if (
-                    isinstance(val, dict) or (
-                      isinstance(val, list) and
-                      len(val) > 0 and
-                      isinstance(val[0], dict))):
-
-                # Values for the next recursive call
-                tmp_prevkey = prevkey
-                tmp_level = level
-
-                if isinstance(val, dict):
-                    # The val is a dict
-                    if prevkey != "" and prevkey != key:
-                        tmp_level += 1
-
-                    if re.match(r'^[a-zA-Z0-9_-]+$', key) is None:
-                        key = '"%s"' % key
-
-                    if prevkey == "":
-                        tmp_prevkey = key
-                    else:
-                        tmp_prevkey = "%s.%s" % (prevkey, key)
-
+            if not (isinstance(v, dict) or isinstance(v, list)):
+                if tn:
                     if not first:
                         rv += "\n"
 
-                    rv += "%s[%s]\n" % (indent * tmp_level, tmp_prevkey)
-                elif isinstance(val[0], dict):
-                    # The val is a table
-                    if re.match(r'^[a-zA-Z0-9_-]+$', key) is None:
-                        key = '"%s"' % key
-
-                    if prevkey == "":
-                        tmp_prevkey = key
+                    if table_type == 'table':
+                        rv += "[%s]\n" % tn
                     else:
-                        tmp_prevkey = "%s.%s" % (prevkey, key)
+                        rv += "[[%s]]\n" % tn
 
-                    tmp_level += 1
+                rv += "%s = %s\n" % (
+                    k,
+                    encode_toml(
+                        v,
+                        convert_bools=convert_bools,
+                        convert_nums=convert_nums,
+                        first=first,
+                        quote=quote))
+
+                first = False
+                tn = ''
+            elif isinstance(v, list) and not isinstance(v[0], dict):
+                if tn:
+                    if not first:
+                        rv += "\n"
+
+                    if table_type == 'table':
+                        rv += "[%s]\n" % tn
+                    else:
+                        rv += "[[%s]]\n" % tn
+
+                rv += "%s = %s\n" % (
+                    k,
+                    encode_toml(
+                        v,
+                        convert_bools=convert_bools,
+                        convert_nums=convert_nums,
+                        first=first,
+                        quote=quote))
+
+                first = False
+                tn = ''
+
+        if not data and table_type is not None:
+            if not first:
+                rv += "\n"
+
+            if table_type == 'table':
+                rv += "[%s]\n" % tn
+            else:
+                rv += "[[%s]]\n" % tn
+
+        # Then process tables and arrays of tables
+        for k, v in sorted(data.iteritems()):
+            tn = table_name
+
+            if isinstance(v, dict):
+                # Table
+                tk = k
+
+                if '.' in k:
+                    tk = "%s%s%s" % (quote, _escape(k, quote), quote)
+
+                if tn:
+                    tn += ".%s" % tk
+                else:
+                    tn += "%s" % tk
 
                 rv += encode_toml(
-                    val,
+                    v,
                     convert_bools=convert_bools,
                     convert_nums=convert_nums,
                     first=first,
-                    indent=indent,
-                    level=tmp_level,
-                    prevkey=tmp_prevkey,
-                    quote=quote)
+                    quote=quote,
+                    table_name=tn,
+                    table_type='table')
 
                 first = False
+            elif isinstance(v, list) and isinstance(v[0], dict):
+                # Array of tables
+                tk = k
+
+                if '.' in k:
+                    tk = "%s%s%s" % (quote, _escape(k, quote), quote)
+
+                if tn:
+                    tn += ".%s" % tk
+                else:
+                    tn += "%s" % tk
+
+                for t in v:
+                    rv += encode_toml(
+                        t,
+                        convert_bools=convert_bools,
+                        convert_nums=convert_nums,
+                        first=first,
+                        quote=quote,
+                        table_name=tn,
+                        table_type='table_array')
+
+                    first = False
+
+    elif isinstance(data, list):
+
+        # Check if all values are elementar (num/str/bool/array)
+        def is_elem(a):
+            all_elementar = True
+
+            for lv in a:
+                if (
+                        isinstance(lv, dict) or (
+                            isinstance(lv, list) and
+                            not is_elem(lv))):
+                    all_elementar = False
+                    break
+
+            return all_elementar
+
+        if is_elem(data):
+            v_len = len(data)
+
+            array = ''
+
+            for i, lv in enumerate(data):
+                array += "%s" % encode_toml(
+                    lv,
+                    convert_bools=convert_bools,
+                    convert_nums=convert_nums,
+                    first=first,
+                    quote=quote)
+
+                if i+1 < v_len:
+                    array += ', '
+
+            rv += "[%s]" % (array)
 
     elif (
             _is_num(data) or
@@ -838,54 +901,10 @@ def encode_toml(
 
         rv += str(data).lower()
 
-        if prevtype != 'list':
-            rv += "\n"
-
     elif isinstance(data, basestring):
         # It's a string
 
-        rv += "%s%s%s" % (
-            quote, _escape(data, quote), quote)
-
-        if prevtype != 'list':
-            rv += "\n"
-
-    else:
-        # It's a list
-
-        if len(data) > 0 and isinstance(data[0], dict):
-            for d in data:
-                rv += "\n%s[[%s]]\n" % (indent * level, prevkey)
-                rv += encode_toml(
-                    d,
-                    convert_bools=convert_bools,
-                    convert_nums=convert_nums,
-                    first=first,
-                    indent=indent,
-                    level=level,
-                    quote=quote)
-        else:
-            rv += "["
-
-            for d in data:
-                rv += encode_toml(
-                    d,
-                    convert_bools=convert_bools,
-                    convert_nums=convert_nums,
-                    first=first,
-                    indent=indent,
-                    level=level,
-                    prevtype='list',
-                    quote=quote)
-
-                # Don't make comma after the last item of the loop
-                if data[-1] != d:
-                    rv += ", "
-
-            rv += "]"
-
-            if prevtype != 'list':
-                rv += "\n"
+        rv += "%s%s%s" % (quote, _escape(data, quote), quote)
 
     return rv
 
