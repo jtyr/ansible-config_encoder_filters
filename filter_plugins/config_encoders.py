@@ -92,7 +92,11 @@ def _escape(data, quote='"', format=None):
             replace('\r', '\\r').
             replace('\t', '\\t'))
     elif quote is not None and len(quote):
-        return str(data).replace('\\', '\\\\').replace(quote, "\\%s" % quote)
+        """Do not escape strings starting with @@@"""
+        if str(data).startswith('@@@'):
+            return re.sub('^@@@', '', str(data))
+        else:
+            return str(data).replace('\\', '\\\\').replace(quote, "\\%s" % quote)
     else:
         return data
 
