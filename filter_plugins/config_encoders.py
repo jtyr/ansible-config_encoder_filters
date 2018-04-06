@@ -92,11 +92,7 @@ def _escape(data, quote='"', format=None):
             replace('\r', '\\r').
             replace('\t', '\\t'))
     elif quote is not None and len(quote):
-        """Do not escape strings starting with @@@"""
-        if str(data).startswith('@@@'):
-            return re.sub('^@@@', '', str(data))
-        else:
-            return str(data).replace('\\', '\\\\').replace(quote, "\\%s" % quote)
+        return str(data).replace('\\', '\\\\').replace(quote, "\\%s" % quote)
     else:
         return data
 
@@ -524,7 +520,7 @@ def encode_json(
 
 def encode_logstash(
         data, convert_bools=False, convert_nums=False, indent="  ", level=0,
-        prevtype="", section_prefix=":"):
+        prevtype="", section_prefix=":", backslash_escaping_ignore_string='@@@'):
     """Convert Python data structure to Logstash format."""
 
     # Return value
@@ -603,7 +599,10 @@ def encode_logstash(
     elif isinstance(data, basestring):
         # It's a string
 
-        rv += '"%s"' % _escape(data)
+        if data.startswith(backslash_escaping_ignore_string):
+            rv += "%s" % data[len(backslash_escaping_ignore_string):]
+        else:
+            rv += '"%s"' % _escape(data)
 
     else:
         # It's a list
