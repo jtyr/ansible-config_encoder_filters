@@ -735,6 +735,51 @@ The filter can have the following parameters:
   This parameter specifies which character will be used to identify the
   Logstash section.
 
+- ``backslash_escaping_ignore_string='@@@'``
+  This parameter sets a string of characters than can be prepended
+  to a string used in the Logstash configuration specification to prevent
+  backslahes from being escaped in the resulting Logstash pipeline configuration
+  file.
+
+  For example, the following pipeline configuration::
+
+      - :grok:
+            match:
+              message: 'sshd(?:\[%{POSINT:[system][auth][pid]}\])?:'
+            add_tag: "i_%{instance_num}"
+            break_on_match: 'false'
+
+
+  Outputs::
+
+        grok {
+          add_tag => "i_%{instance_num}"
+          break_on_match => "false"
+          match => {
+            "message" =>  "sshd(?:\\[%{POSINT:[system][auth][pid]}\\])?:"
+          }
+        }
+
+  Notice the escaped backslashes in the output.
+
+  However, the following pipeline configuration, which uses the backslash_escaping_ignore_string::
+
+       - :grok:
+            match:
+              message: '@@@sshd(?:\[%{POSINT:[system][auth][pid]}\])?:'
+            add_tag: "i_%{instance_num}"
+        break_on_match: 'false'
+
+   Outputs::
+
+        grok {
+          add_tag => "i_%{instance_num}"
+          break_on_match => "false"
+          match => {
+            "message" =>  "sshd(?:\[%{POSINT:[system][auth][pid]}\])?:"
+          }
+        }
+
 
 .. _encode-nginx:
 
@@ -742,7 +787,7 @@ encode_nginx
 ^^^^^^^^^^^^
 
 This filter helps to create configuration in the format used by Nginx
-wweb server. The expected data structure is the following::
+web server. The expected data structure is the following::
 
     my_nginx_vhost_config:
       - server:
