@@ -770,7 +770,7 @@ The filter can have the following parameters:
             add_tag: "i_%{instance_num}"
         break_on_match: 'false'
 
-   Outputs::
+  Outputs::
 
         grok {
           add_tag => "i_%{instance_num}"
