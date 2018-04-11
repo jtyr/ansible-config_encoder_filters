@@ -736,11 +736,12 @@ The filter can have the following parameters:
   Logstash section.
 
 - ``backslash_escaping_ignore_string='@@@'``
-  This parameter sets a string of characters than can be prepended
-  to a string to prevent backslahes from being escaped in the resulting
-  Logstash pipeline configuration file::
 
-    (e.g. `'@@@sshd(?:\[%{POSINT:[system][auth][pid]}\])?:'` will turn to `"sshd(?:\[%{POSINT:[system][auth][pid]}\])?:"` instead of to `"sshd(?:\\[%{POSINT:[system][auth][pid]}\\])?:"`).
+  This parameter defines a sets of characters than can be prepended to a string
+  to prevent backslahes from being escaped in the resulting configuration (e.g.
+  ``"@@@sshd(?:\[%{POSINT:[system][auth][pid]}\])?:"`` will turn to
+  ``"sshd(?:\[%{POSINT:[system][auth][pid]}\])?:"`` instead of to
+  ``"sshd(?:\\[%{POSINT:[system][auth][pid]}\\])?:"``).
 
 
 .. _encode-nginx:
