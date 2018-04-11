@@ -735,6 +735,14 @@ The filter can have the following parameters:
   This parameter specifies which character will be used to identify the
   Logstash section.
 
+- ``backslash_escaping_ignore_string='@@@'``
+
+  This parameter defines a sets of characters than can be prepended to a string
+  to prevent backslahes from being escaped in the resulting configuration (e.g.
+  ``"@@@sshd(?:\[%{POSINT:[system][auth][pid]}\])?:"`` will turn to
+  ``"sshd(?:\[%{POSINT:[system][auth][pid]}\])?:"`` instead of to
+  ``"sshd(?:\\[%{POSINT:[system][auth][pid]}\\])?:"``).
+
 
 .. _encode-nginx:
 
@@ -742,7 +750,7 @@ encode_nginx
 ^^^^^^^^^^^^
 
 This filter helps to create configuration in the format used by Nginx
-wweb server. The expected data structure is the following::
+web server. The expected data structure is the following::
 
     my_nginx_vhost_config:
       - server:
