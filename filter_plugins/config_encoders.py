@@ -174,7 +174,7 @@ def encode_apache(
 
     elif block_type == 'options':
         for o in data:
-            for key, val in sorted(o.iteritems()):
+            for key, val in sorted(o.items()):
                 rv += "%s%s " % (indent * (level-1), key)
                 rv += encode_apache(
                     val,
@@ -250,7 +250,7 @@ def encode_erlang(
 
         rv += "\n"
 
-        for key, val in sorted(data.iteritems()):
+        for key, val in sorted(data.items()):
             if key == ordered_tuple_indicator:
                 rv += "%s{" % (indent*level)
 
@@ -387,7 +387,7 @@ def encode_ini(
     rv = ""
 
     # First process all standalone properties
-    for prop, val in sorted(data.iteritems()):
+    for prop, val in sorted(data.items()):
         if ucase_prop:
             prop = prop.upper()
 
@@ -411,7 +411,7 @@ def encode_ini(
                     quote)
 
     # Then process all sections
-    for section, props in sorted(data.iteritems()):
+    for section, props in sorted(data.items()):
         if isinstance(props, dict):
             if rv != "":
                 rv += "\n"
@@ -448,7 +448,7 @@ def encode_json(
         if len(data) > 0:
             rv += "\n"
 
-        items = sorted(data.iteritems())
+        items = sorted(data.items())
 
         for key, val in items:
             rv += '%s"%s": ' % (indent * (level+1), key)
@@ -532,7 +532,7 @@ def encode_logstash(
         if prevtype in ('value', 'value_hash', 'array'):
             rv += "{\n"
 
-        items = sorted(data.iteritems())
+        items = sorted(data.items())
 
         for key, val in items:
             if key[0] == section_prefix:
@@ -695,7 +695,7 @@ def encode_pam(
     # Remember previous type to make newline between type blocks
     prev_type = None
 
-    for label, rule in sorted(data.iteritems()):
+    for label, rule in sorted(data.items()):
         if separate_types:
             # Add extra newline to separate blocks of the same type
             if prev_type is not None and prev_type != rule['type']:
@@ -757,7 +757,7 @@ def encode_toml(
         tn = table_name
 
         # First process all keys with elementar value (num/str/bool/array)
-        for k, v in sorted(data.iteritems()):
+        for k, v in sorted(data.items()):
 
             if not (isinstance(v, dict) or isinstance(v, list)):
                 if tn:
@@ -812,7 +812,7 @@ def encode_toml(
                 rv += "[[%s]]\n" % tn
 
         # Then process tables and arrays of tables
-        for k, v in sorted(data.iteritems()):
+        for k, v in sorted(data.items()):
             tn = table_name
 
             if isinstance(v, dict):
@@ -1017,7 +1017,7 @@ def encode_yaml(
         if len(data.keys()) == 0:
             rv += "{}\n"
         else:
-            for i, (key, val) in enumerate(sorted(data.iteritems())):
+            for i, (key, val) in enumerate(sorted(data.items())):
                 # Skip indentation only for the first pair
                 rv += "%s%s:" % (
                     "" if i == 0 and skip_indent else level*indent, key)
@@ -1116,7 +1116,7 @@ def template_replace(data, replacement):
         local_data = map(
             lambda x: template_replace(x, replacement), local_data)
     elif isinstance(local_data, dict):
-        for key, val in local_data.iteritems():
+        for key, val in local_data.items():
             local_data[key] = template_replace(val, replacement)
     elif isinstance(local_data, basestring):
         # Replace the special string by it's evaluated value
