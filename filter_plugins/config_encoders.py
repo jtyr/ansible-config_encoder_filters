@@ -365,10 +365,10 @@ def encode_haproxy(data, indent="  "):
 
         if isinstance(section, dict):
             # It's a section
-            rv += "%s\n" % section.keys()[0]
+            rv += "%s\n" % list(section.keys())[0]
 
             # Process all parameters of the section
-            for param in section.values()[0]:
+            for param in list(section.values())[0]:
                 rv += "%s%s\n" % (indent, param)
         else:
             # It's a comment of a parameter
@@ -553,7 +553,7 @@ def encode_logstash(
                             isinstance(val, bool) or (
                                 isinstance(val, dict) and
                                 val and
-                                val.keys()[0][0] != section_prefix)):
+                                list(val.keys())[0][0] != section_prefix)):
                         rv += "\n%s}\n" % (indent * level)
                     else:
                         rv += "%s}\n" % (indent * level)
@@ -608,7 +608,7 @@ def encode_logstash(
         # It's a list
 
         for val in data:
-            if isinstance(val, dict) and val.keys()[0][0] == section_prefix:
+            if isinstance(val, dict) and list(val.keys())[0][0] == section_prefix:
                 # Value is a block
 
                 rv += encode_logstash(
@@ -655,9 +655,9 @@ def encode_nginx(data, indent="  ", level=0, block_semicolon=False):
             if item_type in ('section', 'line'):
                 rv += "\n"
 
-            rv += "%s%s {\n" % (level*indent, item.keys()[0])
+            rv += "%s%s {\n" % (level*indent, list(item.keys())[0])
             rv += encode_nginx(
-                item.values()[0],
+                list(item.values())[0],
                 level=level+1,
                 block_semicolon=block_semicolon)
             rv += "%s}%s\n" % (level*indent, ';' if block_semicolon else '')
@@ -719,7 +719,7 @@ def encode_pam(
                 " ".join(
                     map(
                         lambda k: "=".join(map(str, k)),
-                        map(lambda x: x.items()[0], rule['control']))),
+                        map(lambda x: list(x.items())[0], rule['control']))),
                 separator)
         else:
             rv += "%s%s" % (rule['control'], separator)
@@ -734,7 +734,7 @@ def encode_pam(
                     rv += ' '
 
                 if isinstance(arg, dict):
-                    rv += "=".join(map(str, arg.items()[0]))
+                    rv += "=".join(map(str, list(arg.items())[0]))
                 else:
                     rv += arg
 
@@ -925,7 +925,7 @@ def encode_xml(
             if (
                     not (
                         isinstance(item, dict) and
-                        item.keys()[0].startswith(attribute_sign))):
+                        list(item.keys())[0].startswith(attribute_sign))):
                 rv += encode_xml(
                     item,
                     attribute_sign=attribute_sign,
@@ -935,7 +935,7 @@ def encode_xml(
     elif isinstance(data, dict):
         # It's eiher an attribute or an element
 
-        key, val = data.items()[0]
+        key, val = list(data.items())[0]
 
         if key.startswith(attribute_sign):
             # Process attribute
@@ -951,7 +951,7 @@ def encode_xml(
                 for item in val:
                     if (
                             isinstance(item, dict) and
-                            item.keys()[0].startswith(attribute_sign)):
+                            list(item.keys())[0].startswith(attribute_sign)):
                         num_attrs += 1
                         rv += encode_xml(
                             item,
@@ -974,7 +974,7 @@ def encode_xml(
                     for item in val:
                         if (
                                 isinstance(item, dict) and
-                                not item.keys()[0].startswith(attribute_sign)):
+                                not list(item.keys())[0].startswith(attribute_sign)):
                             val_not_text = True
                             break
                 elif isinstance(val, dict):
