@@ -147,6 +147,8 @@ def encode_apache(
                                 quote_all_nums=quote_all_nums,
                                 quote_all_strings=quote_all_strings,
                                 block_type='value')
+                        else:
+                            rv = rv.rstrip()
 
                         rv += ">\n"
                         rv += encode_apache(
