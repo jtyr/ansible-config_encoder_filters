@@ -519,8 +519,14 @@ def encode_json(
 
 
 def encode_logstash(
-        data, convert_bools=False, convert_nums=False, indent="  ", level=0,
-        prevtype="", section_prefix=":", backslash_escaping_ignore_string='@@@'):
+        data,
+        convert_bools=False,
+        convert_nums=False,
+        indent="  ",
+        level=0,
+        prevtype="",
+        section_prefix=":",
+        backslash_escaping_ignore_string='@@@'):
     """Convert Python data structure to Logstash format."""
 
     # Return value
@@ -608,7 +614,8 @@ def encode_logstash(
         # It's a list
 
         for val in data:
-            if isinstance(val, dict) and list(val.keys())[0][0] == section_prefix:
+            if isinstance(val, dict) and list(
+                    val.keys())[0][0] == section_prefix:
                 # Value is a block
 
                 rv += encode_logstash(
@@ -972,9 +979,8 @@ def encode_xml(
                 if isinstance(val, list):
                     # Check if it contains only attributes and a text value
                     for item in val:
-                        if (
-                                isinstance(item, dict) and
-                                not list(item.keys())[0].startswith(attribute_sign)):
+                        if (isinstance(item, dict) and not list(
+                                item.keys())[0].startswith(attribute_sign)):
                             val_not_text = True
                             break
                 elif isinstance(val, dict):
