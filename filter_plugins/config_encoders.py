@@ -174,7 +174,7 @@ def encode_apache(
 
     elif block_type == 'options':
         for o in data:
-            for key, val in sorted(o.iteritems()):
+            for key, val in sorted(o.items()):
                 rv += "%s%s " % (indent * (level-1), key)
                 rv += encode_apache(
                     val,
@@ -250,7 +250,7 @@ def encode_erlang(
 
         rv += "\n"
 
-        for key, val in sorted(data.iteritems()):
+        for key, val in sorted(data.items()):
             if key == ordered_tuple_indicator:
                 rv += "%s{" % (indent*level)
 
@@ -365,10 +365,10 @@ def encode_haproxy(data, indent="  "):
 
         if isinstance(section, dict):
             # It's a section
-            rv += "%s\n" % section.keys()[0]
+            rv += "%s\n" % list(section.keys())[0]
 
             # Process all parameters of the section
-            for param in section.values()[0]:
+            for param in list(section.values())[0]:
                 rv += "%s%s\n" % (indent, param)
         else:
             # It's a comment of a parameter
@@ -387,7 +387,7 @@ def encode_ini(
     rv = ""
 
     # First process all standalone properties
-    for prop, val in sorted(data.iteritems()):
+    for prop, val in sorted(data.items()):
         if ucase_prop:
             prop = prop.upper()
 
@@ -411,7 +411,7 @@ def encode_ini(
                     quote)
 
     # Then process all sections
-    for section, props in sorted(data.iteritems()):
+    for section, props in sorted(data.items()):
         if isinstance(props, dict):
             if rv != "":
                 rv += "\n"
@@ -448,7 +448,7 @@ def encode_json(
         if len(data) > 0:
             rv += "\n"
 
-        items = sorted(data.iteritems())
+        items = sorted(data.items())
 
         for key, val in items:
             rv += '%s"%s": ' % (indent * (level+1), key)
@@ -520,7 +520,7 @@ def encode_json(
 
 def encode_logstash(
         data, convert_bools=False, convert_nums=False, indent="  ", level=0,
-        prevtype="", section_prefix=":", backslash_escaping_ignore_string='@@@'):
+        prevtype="", section_prefix=":", backslash_ignore_prefix='@@@'):
     """Convert Python data structure to Logstash format."""
 
     # Return value
@@ -532,7 +532,7 @@ def encode_logstash(
         if prevtype in ('value', 'value_hash', 'array'):
             rv += "{\n"
 
-        items = sorted(data.iteritems())
+        items = sorted(data.items())
 
         for key, val in items:
             if key[0] == section_prefix:
@@ -553,7 +553,7 @@ def encode_logstash(
                             isinstance(val, bool) or (
                                 isinstance(val, dict) and
                                 val and
-                                val.keys()[0][0] != section_prefix)):
+                                list(val.keys())[0][0] != section_prefix)):
                         rv += "\n%s}\n" % (indent * level)
                     else:
                         rv += "%s}\n" % (indent * level)
@@ -599,8 +599,8 @@ def encode_logstash(
     elif isinstance(data, basestring):
         # It's a string
 
-        if data.startswith(backslash_escaping_ignore_string):
-            rv += "%s" % data[len(backslash_escaping_ignore_string):]
+        if data.startswith(backslash_ignore_prefix):
+            rv += "%s" % data[len(backslash_ignore_prefix):]
         else:
             rv += '"%s"' % _escape(data)
 
@@ -608,7 +608,8 @@ def encode_logstash(
         # It's a list
 
         for val in data:
-            if isinstance(val, dict) and val.keys()[0][0] == section_prefix:
+            if isinstance(val, dict) and list(
+                    val.keys())[0][0] == section_prefix:
                 # Value is a block
 
                 rv += encode_logstash(
@@ -655,9 +656,9 @@ def encode_nginx(data, indent="  ", level=0, block_semicolon=False):
             if item_type in ('section', 'line'):
                 rv += "\n"
 
-            rv += "%s%s {\n" % (level*indent, item.keys()[0])
+            rv += "%s%s {\n" % (level*indent, list(item.keys())[0])
             rv += encode_nginx(
-                item.values()[0],
+                list(item.values())[0],
                 level=level+1,
                 block_semicolon=block_semicolon)
             rv += "%s}%s\n" % (level*indent, ';' if block_semicolon else '')
@@ -695,7 +696,7 @@ def encode_pam(
     # Remember previous type to make newline between type blocks
     prev_type = None
 
-    for label, rule in sorted(data.iteritems()):
+    for label, rule in sorted(data.items()):
         if separate_types:
             # Add extra newline to separate blocks of the same type
             if prev_type is not None and prev_type != rule['type']:
@@ -719,7 +720,7 @@ def encode_pam(
                 " ".join(
                     map(
                         lambda k: "=".join(map(str, k)),
-                        map(lambda x: x.items()[0], rule['control']))),
+                        map(lambda x: list(x.items())[0], rule['control']))),
                 separator)
         else:
             rv += "%s%s" % (rule['control'], separator)
@@ -734,7 +735,7 @@ def encode_pam(
                     rv += ' '
 
                 if isinstance(arg, dict):
-                    rv += "=".join(map(str, arg.items()[0]))
+                    rv += "=".join(map(str, list(arg.items())[0]))
                 else:
                     rv += arg
 
@@ -757,7 +758,7 @@ def encode_toml(
         tn = table_name
 
         # First process all keys with elementar value (num/str/bool/array)
-        for k, v in sorted(data.iteritems()):
+        for k, v in sorted(data.items()):
 
             if not (isinstance(v, dict) or isinstance(v, list)):
                 if tn:
@@ -812,7 +813,7 @@ def encode_toml(
                 rv += "[[%s]]\n" % tn
 
         # Then process tables and arrays of tables
-        for k, v in sorted(data.iteritems()):
+        for k, v in sorted(data.items()):
             tn = table_name
 
             if isinstance(v, dict):
@@ -925,7 +926,7 @@ def encode_xml(
             if (
                     not (
                         isinstance(item, dict) and
-                        item.keys()[0].startswith(attribute_sign))):
+                        list(item.keys())[0].startswith(attribute_sign))):
                 rv += encode_xml(
                     item,
                     attribute_sign=attribute_sign,
@@ -935,7 +936,7 @@ def encode_xml(
     elif isinstance(data, dict):
         # It's eiher an attribute or an element
 
-        key, val = data.items()[0]
+        key, val = list(data.items())[0]
 
         if key.startswith(attribute_sign):
             # Process attribute
@@ -951,7 +952,7 @@ def encode_xml(
                 for item in val:
                     if (
                             isinstance(item, dict) and
-                            item.keys()[0].startswith(attribute_sign)):
+                            list(item.keys())[0].startswith(attribute_sign)):
                         num_attrs += 1
                         rv += encode_xml(
                             item,
@@ -972,9 +973,8 @@ def encode_xml(
                 if isinstance(val, list):
                     # Check if it contains only attributes and a text value
                     for item in val:
-                        if (
-                                isinstance(item, dict) and
-                                not item.keys()[0].startswith(attribute_sign)):
+                        if (isinstance(item, dict) and not list(
+                                item.keys())[0].startswith(attribute_sign)):
                             val_not_text = True
                             break
                 elif isinstance(val, dict):
@@ -1017,7 +1017,7 @@ def encode_yaml(
         if len(data.keys()) == 0:
             rv += "{}\n"
         else:
-            for i, (key, val) in enumerate(sorted(data.iteritems())):
+            for i, (key, val) in enumerate(sorted(data.items())):
                 # Skip indentation only for the first pair
                 rv += "%s%s:" % (
                     "" if i == 0 and skip_indent else level*indent, key)
@@ -1116,7 +1116,7 @@ def template_replace(data, replacement):
         local_data = map(
             lambda x: template_replace(x, replacement), local_data)
     elif isinstance(local_data, dict):
-        for key, val in local_data.iteritems():
+        for key, val in local_data.items():
             local_data[key] = template_replace(val, replacement)
     elif isinstance(local_data, basestring):
         # Replace the special string by it's evaluated value
