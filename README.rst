@@ -1302,17 +1302,18 @@ And the result of such usage is the following::
 Testing
 -------
 
-All encoders have a set of unit tests. Full test can be executed like this:
+All encoders have a set of unit tests automated through
+`tox<http://tox.readthedocs.io>`. Full test can be executed like this:
 
-    $ python2 -m unittest tests.test_config_encoders
+    $ tox
 
 Individual encoder can be tested like this:
 
-    $ python2 -m unittest tests.test_config_encoders.TestYaml
+    $ tox -- python -m unittest tests.test_config_encoders.TestYaml
 
 Individual tests can be executed like this:
 
-    $ python2 -m unittest tests.test_config_encoders.TestYaml.test_string
+    $ tox -- python -m unittest tests.test_config_encoders.TestYaml.test_string
 
 Tests are great source of advanced examples of how to use each of the encoders.
 Explore them in the directory ``tests/files``. The content of the ``.in`` files
