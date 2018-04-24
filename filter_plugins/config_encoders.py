@@ -519,14 +519,8 @@ def encode_json(
 
 
 def encode_logstash(
-        data,
-        convert_bools=False,
-        convert_nums=False,
-        indent="  ",
-        level=0,
-        prevtype="",
-        section_prefix=":",
-        backslash_escaping_ignore_string='@@@'):
+        data, convert_bools=False, convert_nums=False, indent="  ", level=0,
+        prevtype="", section_prefix=":", backslash_ignore_prefix='@@@'):
     """Convert Python data structure to Logstash format."""
 
     # Return value
@@ -605,8 +599,8 @@ def encode_logstash(
     elif isinstance(data, basestring):
         # It's a string
 
-        if data.startswith(backslash_escaping_ignore_string):
-            rv += "%s" % data[len(backslash_escaping_ignore_string):]
+        if data.startswith(backslash_ignore_prefix):
+            rv += "%s" % data[len(backslash_ignore_prefix):]
         else:
             rv += '"%s"' % _escape(data)
 

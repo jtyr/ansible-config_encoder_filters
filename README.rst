@@ -735,7 +735,7 @@ The filter can have the following parameters:
   This parameter specifies which character will be used to identify the
   Logstash section.
 
-- ``backslash_escaping_ignore_string='@@@'``
+- ``backslash_ignore_prefix='@@@'``
 
   This parameter defines a sets of characters than can be prepended to a string
   to prevent backslahes from being escaped in the resulting configuration (e.g.
