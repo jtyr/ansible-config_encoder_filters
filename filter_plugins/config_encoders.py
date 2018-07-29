@@ -132,12 +132,13 @@ def encode_apache(
                             is_empty = True
 
                     if is_empty:
-                        rv += "%s<%s " % (indent * level, s['name'])
+                        rv += "%s<%s" % (indent * level, s['name'])
 
                         if 'operator' in s:
-                            rv += "%s " % s['operator']
+                            rv += " %s" % s['operator']
 
                         if 'param' in s:
+                            rv += ' '
                             rv += encode_apache(
                                 s['param'],
                                 convert_bools=convert_bools,
