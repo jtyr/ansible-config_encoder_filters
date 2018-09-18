@@ -799,6 +799,10 @@ The filter can have the following parameters:
 
   Allows to add a semicolon to the end of each block.
 
+- ``semicolon_ignore_postfix='!;'``
+
+  If the line ends with ``!;`` then don't add the final semicolon.
+
 
 .. _encode-pam:
 

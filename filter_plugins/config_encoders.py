@@ -643,7 +643,9 @@ def encode_logstash(
     return rv
 
 
-def encode_nginx(data, indent="  ", level=0, block_semicolon=False):
+def encode_nginx(
+        data, indent="  ", level=0, block_semicolon=False,
+        semicolon_ignore_postfix='!;'):
     """Convert Python data structure to Nginx format."""
 
     # Return value
@@ -672,11 +674,16 @@ def encode_nginx(data, indent="  ", level=0, block_semicolon=False):
                 rv += "\n"
 
             item_type = 'line'
+            ignore_semicolon = False
+
+            if item.endswith(semicolon_ignore_postfix):
+                item = item[:-len(semicolon_ignore_postfix)]
+                ignore_semicolon = True
 
             rv += "%s%s" % (level*indent, item)
 
             # Do not finish comments with semicolon
-            if item.startswith("# "):
+            if item.startswith("# ") or ignore_semicolon:
                 rv += "\n"
             else:
                 rv += ";\n"
