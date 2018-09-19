@@ -663,7 +663,8 @@ def encode_nginx(
             rv += encode_nginx(
                 list(item.values())[0],
                 level=level+1,
-                block_semicolon=block_semicolon)
+                block_semicolon=block_semicolon,
+                semicolon_ignore_postfix=semicolon_ignore_postfix)
             rv += "%s}%s\n" % (level*indent, ';' if block_semicolon else '')
 
             item_type = 'section'
