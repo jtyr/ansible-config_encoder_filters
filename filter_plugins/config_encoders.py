@@ -370,7 +370,13 @@ def encode_haproxy(data, indent="  "):
 
             # Process all parameters of the section
             for param in list(section.values())[0]:
-                rv += "%s%s\n" % (indent, param)
+                if isinstance(param, dict):
+                    for p_val in list(param.values())[0]:
+                        if len(p_val) > 0:
+                            rv += "%s%s %s\n" % (indent, list(param.keys())[0], p_val)
+                else:
+                    if len(param) > 0:
+                        rv += "%s%s\n" % (indent, param)
         else:
             # It's a comment of a parameter
             rv += "%s\n" % section
