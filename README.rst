@@ -416,9 +416,10 @@ The expected data structure is the following::
       - "# This is the default section"
       - defaults:
         - mode http
-        - timeout connect 5000ms
-        - timeout client 50000ms
-        - timeout server 50000ms
+        - timeout:
+            - connect 5000ms
+            - client 50000ms
+            - server 50000ms
       - frontend http-in:
         - "# This is the bind address/port"
         - bind *:80
