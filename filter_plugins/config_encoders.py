@@ -373,7 +373,8 @@ def encode_haproxy(data, indent="  "):
                 if isinstance(param, dict):
                     for p_val in list(param.values())[0]:
                         if len(p_val) > 0:
-                            rv += "%s%s %s\n" % (indent, list(param.keys())[0], p_val)
+                            rv += "%s%s %s\n" % (
+                                indent, list(param.keys())[0], p_val)
                 else:
                     if len(param) > 0:
                         rv += "%s%s\n" % (indent, param)
