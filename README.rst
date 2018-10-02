@@ -800,6 +800,10 @@ The filter can have the following parameters:
 
   Allows to add a semicolon to the end of each block.
 
+- ``semicolon=';'``
+
+  Semicolon character. Set this to empty string to ignore all semicolons.
+
 - ``semicolon_ignore_postfix='!;'``
 
   If the line ends with ``!;`` then don't add the final semicolon.

@@ -651,7 +651,7 @@ def encode_logstash(
 
 
 def encode_nginx(
-        data, indent="  ", level=0, block_semicolon=False,
+        data, indent="  ", level=0, block_semicolon=False, semicolon=';',
         semicolon_ignore_postfix='!;'):
     """Convert Python data structure to Nginx format."""
 
@@ -671,8 +671,10 @@ def encode_nginx(
                 list(item.values())[0],
                 level=level+1,
                 block_semicolon=block_semicolon,
+                semicolon=semicolon,
                 semicolon_ignore_postfix=semicolon_ignore_postfix)
-            rv += "%s}%s\n" % (level*indent, ';' if block_semicolon else '')
+            rv += "%s}%s\n" % (
+                level*indent, semicolon if block_semicolon else '')
 
             item_type = 'section'
 
@@ -694,7 +696,7 @@ def encode_nginx(
             if item.startswith("# ") or ignore_semicolon:
                 rv += "\n"
             else:
-                rv += ";\n"
+                rv += "%s\n" % (semicolon)
 
         else:
             raise errors.AnsibleFilterError(
