@@ -73,13 +73,17 @@ allows to create truly universal configuration.
 Example
 -------
 
-Imagine the following INI file::
+Imagine the following INI file:
+
+.. code:: ini
 
     [section1]
     option11=value11
     option12=value12
 
-Such configuration file can be described as a YAML data structure::
+Such configuration file can be described as a YAML data structure:
+
+.. code:: yaml
 
     myapp_config:
       section1:
@@ -87,11 +91,15 @@ Such configuration file can be described as a YAML data structure::
         option12: value12
 
 The variable is then used together with the ``encode_ini`` Config Encoder
-filter in the template file ``myapp.cfg.j2`` like this::
+filter in the template file ``myapp.cfg.j2`` like this:
+
+.. code:: jinja2
 
     {{ myapp_config | encode_ini }}
 
-And finally, the template file is used in a task like this::
+And finally, the template file is used in a task like this:
+
+.. code:: yaml
 
     - name: Create config file
       template:
@@ -109,7 +117,9 @@ In order to change the above configuration, we would have to overwrite
 the ``myapp_config`` which is not very practical. Therefore we break the
 monolithic variable into a set of variables which will allow us to change
 any part of the configuration without the need to overwrite the whole
-data structure::
+data structure:
+
+.. code:: yaml
 
     myapp_config_section1_option11: value11
     myapp_config_section1_option12: value12
@@ -132,20 +142,26 @@ data structure::
       myapp_config__default }}"
 
 Like this, if we want to change the value of the ``option11``, we only
-override the variable ``myapp_config_section1_option11``::
+override the variable ``myapp_config_section1_option11``:
+
+.. code:: yaml
 
     myapp_config_section1_option11: My new value
 
 If we want to add a new option into the ``section1``, we add it into the
 variable ``myapp_config_section1__custom`` which is then merged with the
-default list of options::
+default list of options:
+
+.. code:: yaml
 
     myapp_config_section1__custom:
       section13: value13
 
 And if we want to add a new section, we add it into the variable
 ``myapp_config__custom`` which is then merged with the default list of
-sections::
+sections:
+
+.. code:: yaml
 
     myapp_config__custom:
       section2:
@@ -163,13 +179,17 @@ Usage
 
 Config Encoder filters can be used in any Ansible role by adding the
 ``config_encoder_filters`` role into the list of dependencies in the
-``meta/main.yml`` file::
+``meta/main.yml`` file:
+
+.. code:: yaml
 
     dependencies:
       - config_encoder_filters
 
 The usage directy from a Playbook requires to add the
-``config_encoder_filters`` into the list of roles::
+``config_encoder_filters`` into the list of roles:
+
+.. code:: yaml
 
     - name: My test Play
       hosts: all
@@ -187,11 +207,15 @@ The usage directy from a Playbook requires to add the
 Installation
 ------------
 
-The role can be downloaded either via Ansible Galaxy command::
+The role can be downloaded either via Ansible Galaxy command:
+
+.. code:: shell
 
     $ ansible-galaxy install jtyr.config_encoder_filters,master,config_encoder_filters
 
-or via Ansible Gallaxy requirements file::
+or via Ansible Gallaxy requirements file:
+
+.. code:: shell
 
     $ cat ./requirements.yaml
     ---
@@ -200,7 +224,9 @@ or via Ansible Gallaxy requirements file::
       name: config_encoder_filters
     $ ansible-galaxy -r ./requirements.yaml
 
-or via Git::
+or via Git:
+
+.. code:: shell
 
     $ git clone https://github.com/jtyr/ansible-config_encoder_filters.git config_encoder_filters
 
@@ -221,7 +247,9 @@ encode_apache
 ^^^^^^^^^^^^^
 
 This filter helps to create configuration in the format used by Apache
-web server. The expected data structure is the following::
+web server. The expected data structure is the following:
+
+.. code:: yaml
 
     my_apache_vhost:
       content:
@@ -243,11 +271,15 @@ The variable starts with ``content`` which can contain list of
 sections which has the ``name``, ``param`` and ``content`` parameter. The
 ``content`` can again contain a list of `sections`` or ``options``.
 
-The above variable can be used in the template file like this::
+The above variable can be used in the template file like this:
+
+.. code:: jinja2
 
     {{ my_apache_vhost | encode_apache }}
 
-The output of such template would be::
+The output of such template would be:
+
+.. code:: apache
 
     <VirtualHost *:80>
       DocumentRoot /www/example1
@@ -304,7 +336,9 @@ encode_erlang
 ^^^^^^^^^^^^^
 
 This filter helps to create configuration in the Erlang format. The
-expected data structure is the following::
+expected data structure is the following:
+
+.. code:: yaml
 
     my_rabbitmq_config:
       - rabbit:
@@ -321,8 +355,8 @@ expected data structure is the following::
         - cluster_nodes:
             ::
               -
-                - node1
-                - node2
+                - :"'rabbit@node1'"
+                - :"'rabbit@node2'"
               - :disc
 
 The variable consists of a lists of dictionaries. The value of the key-value
@@ -333,11 +367,15 @@ using special construction as shown for the ``cluste_nodes`` tuple from the
 above example. The indicator starting this special construction can be set with
 the parameter ``ordered_tuple_indicator``.
 
-The above variable can be used in the template file like this::
+The above variable can be used in the template file like this:
+
+.. code:: jinja2
 
     {{ my_rabbitmq_config | encode_erlang }}
 
-The output of such template would be::
+The output of such template would be:
+
+.. code:: erlang
 
     [
       {rabbit, [
@@ -356,8 +394,8 @@ The output of such template would be::
           ]},
           {cluster_nodes,
             {[
-              "node1",
-              "node2"
+              'rabbit@node1',
+              'rabbit@node2'
             ], disc}}
       ]}
     ].
@@ -407,7 +445,9 @@ encode_haproxy
 ^^^^^^^^^^^^^^
 
 This filter helps to create configuration in the format used in Haproxy.
-The expected data structure is the following::
+The expected data structure is the following:
+
+.. code:: yaml
 
     my_haproxy_config:
       - global:
@@ -430,11 +470,15 @@ The expected data structure is the following::
 The variable is a list which can contain a simple string value or a dictionary
 which indicates a section.
 
-The above variable can be used in the template file like this::
+The above variable can be used in the template file like this:
+
+.. code:: jinja2
 
     {{ my_haproxy_config | encode_haproxy }}
 
-The output of such template would be::
+The output of such template would be:
+
+.. code:: haproxy
 
     global
       daemon
@@ -467,7 +511,9 @@ encode_ini
 ^^^^^^^^^^
 
 This filter helps to create configuration in the INI format. The expected
-data structure is the following::
+data structure is the following:
+
+.. code:: yaml
 
     my_rsyncd_config:
       uid: nobody
@@ -487,11 +533,15 @@ the key-value pair on the first level is another dictionary, the key is
 considered to be the name of the section and the inner dictionary as properties
 of the section.
 
-The above variable can be used in the template file like this::
+The above variable can be used in the template file like this:
+
+.. code:: jinja2
 
     {{ my_rsyncd_config | encode_ini }}
 
-The output of such template would be::
+The output of such template would be:
+
+.. code:: ini
 
     gid=nobody
     max connections=4
@@ -539,7 +589,9 @@ encode_json
 ^^^^^^^^^^^
 
 This filter helps to create configuration in the JSON format. The
-expected data structure is the following::
+expected data structure is the following:
+
+.. code:: yaml
 
     my_sensu_client_config:
       client:
@@ -553,11 +605,15 @@ dictionaries of which value can be either an simple type (number, string,
 boolean), list or another dictionary. All can be nested in any number of
 levels.
 
-The above variable can be used in the template file like this::
+The above variable can be used in the template file like this:
+
+.. code:: jinja2
 
     {{ my_sensu_client_config | encode_json }}
 
-The output of such template would be::
+The output of such template would be:
+
+.. code:: json
 
     {
       "client": {
@@ -605,7 +661,9 @@ encode_logstash
 ^^^^^^^^^^^^^^^
 
 This filter helps to create configuration in the format used by Logstash.
-The expected data structure is the following::
+The expected data structure is the following:
+
+.. code:: yaml
 
     my_logstash_config:
       - :input:
@@ -645,11 +703,15 @@ prefixed by a special character specified by the ``section_prefix``
 another section or a dictionary. The value of the dictionary can be a
 simple value, list or another dictionary.
 
-The above variable can be used in the template file like this::
+The above variable can be used in the template file like this:
+
+.. code:: jinja2
 
     {{ my_logstash_config | encode_logstash }}
 
-The output of such template would be::
+The output of such template would be:
+
+.. code:: logstash
 
     input {
       file {
@@ -751,7 +813,9 @@ encode_nginx
 ^^^^^^^^^^^^
 
 This filter helps to create configuration in the format used by Nginx
-web server. The expected data structure is the following::
+web server. The expected data structure is the following:
+
+.. code:: yaml
 
     my_nginx_vhost_config:
       - server:
@@ -768,11 +832,15 @@ further separated into key/value dictionary. Every line of the
 configuration is treated either as a key indicating another nested list
 or simply as a string.
 
-The above variable can be used in the template file like this::
+The above variable can be used in the template file like this:
+
+.. code:: jinja2
 
     {{ my_nginx_vhost | encode_nginx }}
 
-The output of such template would be::
+The output of such template would be:
+
+.. code:: nginx
 
     server {
       listen 80;
@@ -816,7 +884,9 @@ encode_pam
 
 This filter helps to create configuration in the format user by Linux
 Pluggable Authentication Modules (PAM). The expected data structure is
-the following::
+the following:
+
+.. code:: yaml
 
     my_system_auth_config:
       aa:
@@ -878,11 +948,15 @@ is the PAM rule. The label is used to order the PAM rules. Using labels
 with even number of characters allows to insert another rule in between
 of any two rules.
 
-The above variable can be used in the template file like this::
+The above variable can be used in the template file like this:
+
+.. code:: jinja2
 
     {{ my_system_auth_config | encode_pam }}
 
-The output of such template would be::
+The output of such template would be:
+
+.. code:: pam
 
     auth  required  pam_unix.so  try_first_pass nullok
     auth  optional  pam_permit.so
@@ -920,7 +994,9 @@ encode_toml
 ^^^^^^^^^^^
 
 This filter helps to create configuration in the TOML format. The
-expected data structure is the following::
+expected data structure is the following:
+
+.. code:: yaml
 
     my_grafana_ldap_config:
       verbose_logging: false
@@ -953,11 +1029,15 @@ The variable is a dictionary of which value can be either a simple type
 (number, string, boolean), list or another dictionary. The dictionaries
 and lists can be nested.
 
-The above variable can be used in the template file like this::
+The above variable can be used in the template file like this:
+
+.. code:: jinja2
 
     {{ my_grafana_ldap_config | encode_toml }}
 
-The output of such template would be::
+The output of such template would be:
+
+.. code:: toml
 
     verbose_logging = false
 
@@ -1021,7 +1101,9 @@ encode_xml
 ^^^^^^^^^^
 
 This filter helps to create configuration in the XML format. The expected
-data structure is the following::
+data structure is the following:
+
+.. code:: yaml
 
     my_oddjob_config:
       - oddjobconfig:
@@ -1060,11 +1142,15 @@ include mixed content is to define it as a string and use the parameter
 ``escape_xml=false``. This config encoder also produces no XML declaration.
 Any XML declaration or DOCTYPE must be a part of the template file.
 
-The above variable can be used in the template file like this::
+The above variable can be used in the template file like this:
+
+.. code:: jinja2
 
     {{ my_oddjob_config | encode_xml }}
 
-The output of such template would be::
+The output of such template would be:
+
+.. code:: xml
 
     <oddjobconfig>
       <service name="com.redhat.oddjob">
@@ -1112,7 +1198,9 @@ encode_yaml
 ^^^^^^^^^^^
 
 This filter helps to create configuration in the YAML format. The
-expected data structure is the following::
+expected data structure is the following:
+
+.. code:: yaml
 
     my_mongodb_config:
       systemLog:
@@ -1134,11 +1222,15 @@ The variable is ordinary YAML. The only purpose of this encoder filter is
 to be able to convert YAML data structure into the string in a template
 file in unified way compatible with the other config encoders.
 
-The above variable can be used in the template file like this::
+The above variable can be used in the template file like this:
+
+.. code:: jinja2
 
     {{ my_mongodb_config | encode_yaml }}
 
-The output of such template would be::
+The output of such template would be:
+
+.. code:: yaml
 
     net:
       bindIp: "127.0.0.1"
@@ -1217,7 +1309,9 @@ The filter expects the template variable containing the specially decorated
 variables as its input. The filter has one parameter which is used to replaced
 the specially decorated variables in the template variable.
 
-Let's have a look at an example of such usage::
+Let's have a look at an example of such usage:
+
+.. code:: yaml
 
     # The variable used as the replacement in the template variable
     my_clients:
@@ -1254,7 +1348,9 @@ Let's have a look at an example of such usage::
         items: "{{ my_clients }}"
 
 The above variable can be used together with the `template_replace` filter in
-the template file (``bacula-dir.conf.j2``) like this::
+the template file (``bacula-dir.conf.j2``) like this:
+
+.. code:: jinja2
 
     {% for record in bacula_director_config_job_client %}
       {%- for item in record['items'] -%}
@@ -1262,14 +1358,18 @@ the template file (``bacula-dir.conf.j2``) like this::
       {%- endfor -%}
     {% endfor %}
 
-The template file can be called from the playbook/role like this::
+The template file can be called from the playbook/role like this:
+
+.. code:: yaml
 
     - name: Configure Bacula Director
       template:
         src: bacula-dir.conf.j2
         dest: /etc/bacula/bacula-dir.conf
 
-And the result of such usage is the following::
+And the result of such usage is the following:
+
+.. code:: nginx
 
     Job {
       Name = Job-Default-myclient01;
@@ -1314,13 +1414,19 @@ Testing
 All encoders have a set of unit tests automated through
 `tox<http://tox.readthedocs.io>`. Full test can be executed like this:
 
+.. code:: shell
+
     $ tox
 
 Individual encoder can be tested like this:
 
+.. code:: shell
+
     $ tox -- python -m unittest tests.test_config_encoders.TestYaml
 
 Individual tests can be executed like this:
+
+.. code:: shell
 
     $ tox -- python -m unittest tests.test_config_encoders.TestYaml.test_string
 
@@ -1330,6 +1436,8 @@ must be assigned to a variable when using in Ansible. The output in the
 ``.out`` files might depend on additional parameters used in the
 ``tests/test_config_encoders.py`` file. Testing via Ansible can be executed
 like this:
+
+.. code:: shell
 
     $ ansible-playbook -i localhost, tests/test_config_encoders.yaml
 
