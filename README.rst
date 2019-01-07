@@ -1412,7 +1412,7 @@ Testing
 -------
 
 All encoders have a set of unit tests automated through
-`tox<http://tox.readthedocs.io>`. Full test can be executed like this:
+`tox <http://tox.readthedocs.io>`_. Full test can be executed like this:
 
 .. code:: shell
 
