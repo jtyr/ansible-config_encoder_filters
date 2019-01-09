@@ -132,14 +132,14 @@ data structure:
 
     myapp_config_default:
       section1: "{{
-        myapp_config_section1__default.update(myapp_config_section1__custom) }}{{
-        myapp_config_section1__default }}"
+        myapp_config_section1__default | combine(
+        myapp_config_section1__custom) }}"
 
     myapp_config__custom: {}
 
     myapp_config: "{{
-      myapp_config__default.update(myapp_config__custom) }}{{
-      myapp_config__default }}"
+      myapp_config__default | combine(
+      myapp_config__custom) }}"
 
 Like this, if we want to change the value of the ``option11``, we only
 override the variable ``myapp_config_section1_option11``:
