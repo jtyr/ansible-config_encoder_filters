@@ -98,8 +98,8 @@ def _escape(data, quote='"', format=None):
 
 
 def encode_apache(
-        data, convert_bools=False, convert_nums=False, indent="  ", level=0,
-        quote_all_nums=False, quote_all_strings=False, block_type='sections'):
+        data, block_type='sections', convert_bools=False, convert_nums=False,
+        indent="  ", level=0, quote_all_nums=False, quote_all_strings=False):
     """Convert Python data structure to Apache format."""
 
     # Return value
@@ -527,8 +527,9 @@ def encode_json(
 
 
 def encode_logstash(
-        data, convert_bools=False, convert_nums=False, indent="  ", level=0,
-        prevtype="", section_prefix=":", backslash_ignore_prefix='@@@'):
+        data, backslash_ignore_prefix='@@@', convert_bools=False,
+        convert_nums=False, indent="  ", level=0, prevtype="",
+        section_prefix=":"):
     """Convert Python data structure to Logstash format."""
 
     # Return value
@@ -651,7 +652,7 @@ def encode_logstash(
 
 
 def encode_nginx(
-        data, indent="  ", level=0, block_semicolon=False, semicolon=';',
+        data, block_semicolon=False, indent="  ", level=0, semicolon=';',
         semicolon_ignore_postfix='!;'):
     """Convert Python data structure to Nginx format."""
 
@@ -1022,8 +1023,8 @@ def encode_xml(
 
 
 def encode_yaml(
-        data, convert_bools=False, convert_nums=False, indent="  ", level=0,
-        quote='"', skip_indent=False):
+        data, block_prefix=';;;', convert_bools=False, convert_nums=False,
+        indent="  ", level=0, quote='"', skip_indent=False):
     """Convert Python data structure to YAML format."""
 
     # Return value
@@ -1053,6 +1054,7 @@ def encode_yaml(
 
                     rv += encode_yaml(
                         val,
+                        block_prefix=block_prefix,
                         convert_bools=convert_bools,
                         convert_nums=convert_nums,
                         indent=indent,
@@ -1073,6 +1075,7 @@ def encode_yaml(
 
                 rv += "%s%s" % (list_indent, encode_yaml(
                     item,
+                    block_prefix=block_prefix,
                     convert_bools=convert_bools,
                     convert_nums=convert_nums,
                     indent=indent,
@@ -1098,7 +1101,11 @@ def encode_yaml(
     else:
         # It's a string
 
-        rv += "%s%s%s\n" % (quote, _escape(data, quote), quote)
+        if data.startswith(block_prefix):
+            rv += "%s\n" % data[len(block_prefix):].replace(
+                "\n", "\n%s" % (level*indent))
+        else:
+            rv += "%s%s%s\n" % (quote, _escape(data, quote), quote)
 
     return rv
 

@@ -224,6 +224,9 @@ class TestYaml(MyTestCase):
     def test_dict(self):
         self._test('dict')
 
+    def test_block(self):
+        self._test('block')
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -766,6 +766,14 @@ The output of such template would be:
 
 The filter can have the following parameters:
 
+- ``backslash_ignore_prefix='@@@'``
+
+  This parameter defines a sets of characters than can be prepended to a string
+  to prevent backslahes from being escaped in the resulting configuration (e.g.
+  ``"@@@sshd(?:\[%{POSINT:[system][auth][pid]}\])?:"`` will turn to
+  ``"sshd(?:\[%{POSINT:[system][auth][pid]}\])?:"`` instead of to
+  ``"sshd(?:\\[%{POSINT:[system][auth][pid]}\\])?:"``).
+
 - ``convert_bools=false``
 
   Indicates whether Boolean values presented as a string should be
@@ -797,14 +805,6 @@ The filter can have the following parameters:
 
   This parameter specifies which character will be used to identify the
   Logstash section.
-
-- ``backslash_ignore_prefix='@@@'``
-
-  This parameter defines a sets of characters than can be prepended to a string
-  to prevent backslahes from being escaped in the resulting configuration (e.g.
-  ``"@@@sshd(?:\[%{POSINT:[system][auth][pid]}\])?:"`` will turn to
-  ``"sshd(?:\[%{POSINT:[system][auth][pid]}\])?:"`` instead of to
-  ``"sshd(?:\\[%{POSINT:[system][auth][pid]}\\])?:"``).
 
 
 .. _encode-nginx:
@@ -854,6 +854,10 @@ The output of such template would be:
 
 The filter can have the following parameters:
 
+- ``block_semicolon=false``
+
+  Allows to add a semicolon to the end of each block.
+
 - ``indent="  "``
 
   Defines the indentation unit.
@@ -863,10 +867,6 @@ The filter can have the following parameters:
   Indicates the initial level of the indentation. Value ``0`` starts
   indenting from the beginning of the line. Setting the value to higher
   than ``0`` indents the content by ``indent * level``.
-
-- ``block_semicolon=false``
-
-  Allows to add a semicolon to the end of each block.
 
 - ``semicolon=';'``
 
@@ -1248,6 +1248,17 @@ The output of such template would be:
       path: "/var/log/mongodb/mongod.log"
 
 The filter can have the following parameters:
+
+- ``block_prefix=';;;'``
+
+  Allows to maintain block signs in the output.
+
+  .. code:: yaml
+
+      aaa: |-
+        ;;;|-
+        bbb = ccc
+        ddd = eee
 
 - ``convert_bools=false``
 
