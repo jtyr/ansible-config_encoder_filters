@@ -8,7 +8,7 @@
 - name: Comparison for {{ item.encoder }}_{{ item.out | default(item.in) }}
   assert:
     that: >
-      {{ (
+      "{{ (
         myinput | encode_apache(**item.params | default({}))
           if item.encoder == 'encode_apache' else
         myinput | encode_erlang(**item.params | default({}))
@@ -30,4 +30,4 @@
         myinput | encode_xml(**item.params | default({}))
           if item.encoder == 'encode_xml' else
         myinput | encode_yaml(**item.params | default({}))
-      ) }} == {{ lookup('file', 'files/{{ item.encoder }}_{{ item.out | default(item.in) }}.out') }}
+      ) | trim | hash('md5') }}" == "{{ lookup('file', 'files/{{ item.encoder }}_{{ item.out | default(item.in) }}.out') | trim | hash('md5') }}"

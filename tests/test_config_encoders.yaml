@@ -4,8 +4,7 @@
   connection: local
   gather_facts: no
   vars:
-    # Not working tests! ;o(
-    xtests:
+    tests:
       # Apache
       - encoder: encode_apache
         in: boolean
@@ -40,35 +39,7 @@
           quote_all_strings: yes
       - encoder: encode_apache
         in: vhost
-      # YAML
-      - encoder: encode_yaml
-        in: boolean
-      - encoder: encode_yaml
-        in: boolean
-        out: boolean_convert
-        params:
-          convert_bools: yes
-      - encoder: encode_yaml
-        in: string
-      - encoder: encode_yaml
-        in: number
-      - encoder: encode_yaml
-        in: number
-        out: number_convert
-        params:
-          convert_nums: yes
-      - encoder: encode_yaml
-        in: list
-      - encoder: encode_yaml
-        in: list
-        out: list_indent
-        params:
-          indent: "    "
-      - encoder: encode_yaml
-        in: dict
 
-    # Working tests
-    tests:
       # JSON
       - encoder: encode_json
         in: boolean
@@ -94,6 +65,33 @@
         params:
           indent: "    "
       - encoder: encode_json
+        in: dict
+
+      # YAML
+      - encoder: encode_yaml
+        in: boolean
+      - encoder: encode_yaml
+        in: boolean
+        out: boolean_convert
+        params:
+          convert_bools: yes
+      - encoder: encode_yaml
+        in: string
+      - encoder: encode_yaml
+        in: number
+      - encoder: encode_yaml
+        in: number
+        out: number_convert
+        params:
+          convert_nums: yes
+      - encoder: encode_yaml
+        in: list
+      - encoder: encode_yaml
+        in: list
+        out: list_indent
+        params:
+          indent: "    "
+      - encoder: encode_yaml
         in: dict
   roles:
     - config_encoder_filters
