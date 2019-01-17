@@ -227,6 +227,9 @@ class TestYaml(MyTestCase):
     def test_block(self):
         self._test('block')
 
+    def test_null(self):
+        self._test('null')
+
 
 if __name__ == '__main__':
     unittest.main()

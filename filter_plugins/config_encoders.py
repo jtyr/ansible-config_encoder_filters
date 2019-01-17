@@ -1101,7 +1101,9 @@ def encode_yaml(
     else:
         # It's a string
 
-        if data.startswith(block_prefix):
+        if data is None:
+            rv += "null\n"
+        elif data.startswith(block_prefix):
             rv += "%s\n" % data[len(block_prefix):].replace(
                 "\n", "\n%s" % (level*indent))
         else:
