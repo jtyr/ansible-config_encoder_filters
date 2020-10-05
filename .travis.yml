@@ -8,6 +8,7 @@ python:
   - 3.5
   - 3.6
   - 3.7
+  - 3.8
 
 matrix:
   fast_finish: true
@@ -19,6 +20,7 @@ env:
     - ANSIBLE=2.6
     - ANSIBLE=2.7
     - ANSIBLE=2.8
+    - ANSIBLE=2.9
 
 install:
   - pip install tox-travis
