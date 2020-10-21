@@ -22,16 +22,10 @@ More information: https://github.com/jtyr/ansible-config_encoder_filters
 """
 
 from __future__ import (absolute_import, division, print_function)
+from ansible.module_utils.six import string_types
 from ansible import errors
 from copy import copy
 import re
-
-
-# Required for Python 3 compatibility
-try:
-    basestring
-except NameError:
-    basestring = str
 
 
 def _str_is_bool(data):
@@ -204,7 +198,7 @@ def encode_apache(
             else:
                 rv += str(data)
 
-        elif isinstance(data, basestring):
+        elif isinstance(data, string_types):
             # Value is a string
             if (
                     quote_all_strings or
@@ -294,7 +288,7 @@ def encode_erlang(
 
         rv += str(data).lower()
 
-    elif isinstance(data, basestring):
+    elif isinstance(data, string_types):
         # It's a string
 
         atom_len = len(atom_value_indicator)
@@ -315,7 +309,7 @@ def encode_erlang(
 
         for val in data:
             if (
-                    isinstance(val, basestring) or
+                    isinstance(val, string_types) or
                     _is_num(val)):
                 rv += "\n%s" % (indent*level)
 
@@ -409,7 +403,7 @@ def encode_ini(
         for item in vals:
             if (
                     len(quote) == 0 and
-                    isinstance(item, basestring) and
+                    isinstance(item, string_types) and
                     len(item) == 0):
                 item = '""'
 
@@ -490,7 +484,7 @@ def encode_json(
 
         rv += str(data).lower()
 
-    elif isinstance(data, basestring):
+    elif isinstance(data, string_types):
         # It's a string
 
         rv += '"%s"' % _escape(_escape(data), format='control')
@@ -557,7 +551,7 @@ def encode_logstash(
                 # Last item of the loop
                 if items[-1] == (key, val):
                     if (
-                            isinstance(val, basestring) or
+                            isinstance(val, string_types) or
                             _is_num(val) or
                             isinstance(val, bool) or (
                                 isinstance(val, dict) and
@@ -585,7 +579,7 @@ def encode_logstash(
 
             if (
                     items[-1] != (key, val) and (
-                        isinstance(val, basestring) or
+                        isinstance(val, string_types) or
                         _is_num(val) or
                         isinstance(val, bool))):
                 rv += "\n"
@@ -605,7 +599,7 @@ def encode_logstash(
 
         rv += str(data).lower()
 
-    elif isinstance(data, basestring):
+    elif isinstance(data, string_types):
         # It's a string
 
         if data.startswith(backslash_ignore_prefix):
@@ -679,7 +673,7 @@ def encode_nginx(
 
             item_type = 'section'
 
-        elif isinstance(item, basestring):
+        elif isinstance(item, string_types):
             # Normal line
             if item_type == 'section':
                 rv += "\n"
@@ -924,7 +918,7 @@ def encode_toml(
 
         rv += str(data).lower()
 
-    elif isinstance(data, basestring):
+    elif isinstance(data, string_types):
         # It's a string
 
         rv += "%s%s%s" % (quote, _escape(data, quote), quote)
@@ -1145,7 +1139,7 @@ def template_replace(data, replacement):
     elif isinstance(local_data, dict):
         for key, val in local_data.items():
             local_data[key] = template_replace(val, replacement)
-    elif isinstance(local_data, basestring):
+    elif isinstance(local_data, string_types):
         # Replace the special string by it's evaluated value
         p = re.compile(r'\{\[\{\s*(\w+)([^}\s]+|)\s*\}\]\}')
         local_data = p.sub(__eval_replace, local_data)
