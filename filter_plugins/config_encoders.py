@@ -800,7 +800,7 @@ def encode_toml(
 
                 first = False
                 tn = ''
-            elif isinstance(v, list) and not isinstance(v[0], dict):
+            elif isinstance(v, list) and (not v or not isinstance(v[0], dict)):
                 if tn:
                     if not first:
                         rv += "\n"
@@ -857,7 +857,7 @@ def encode_toml(
                     table_type='table')
 
                 first = False
-            elif isinstance(v, list) and isinstance(v[0], dict):
+            elif isinstance(v, list) and (not v or isinstance(v[0], dict)):
                 # Array of tables
                 tk = k
 
