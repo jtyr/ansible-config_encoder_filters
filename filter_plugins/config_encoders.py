@@ -411,6 +411,8 @@ def encode_ini(
                 rv += "%s%s%s%s%s%s\n" % (
                     indent, prop, delimiter, quote, _escape(item, quote),
                     quote)
+            else:
+                rv += "%s%s\n" % (indent, prop)
 
     # Then process all sections
     for section, props in sorted(data.items()):
