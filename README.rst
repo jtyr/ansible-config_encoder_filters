@@ -531,7 +531,7 @@ key-value pair on the first level is of a simple type (string, number, boolean),
 such pair is considered to be global and gets processed first. If the value of
 the key-value pair on the first level is another dictionary, the key is
 considered to be the name of the section and the inner dictionary as properties
-of the section.
+of the section. If the value is null, the key is added with no value.
 
 The above variable can be used in the template file like this:
 
