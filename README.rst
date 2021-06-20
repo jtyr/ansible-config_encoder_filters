@@ -531,7 +531,7 @@ key-value pair on the first level is of a simple type (string, number, boolean),
 such pair is considered to be global and gets processed first. If the value of
 the key-value pair on the first level is another dictionary, the key is
 considered to be the name of the section and the inner dictionary as properties
-of the section. If the value is null, the key is added with no value.
+of the section.
 
 The above variable can be used in the template file like this:
 
@@ -553,6 +553,28 @@ The output of such template would be:
     [ftp]
     comment=ftp area
     path=/srv/ftp
+
+The special value :code:`!!!null` can be used, to create a key without any value.
+This must be wrapped in quotes, to avoid being evaluated as a YAML tag.
+
+To create a key with literal value :code:`!!!null`, the escape sequence :code:`\!!!null` can be used.
+
+Take the following data structure:
+
+.. code:: yaml
+
+    config:
+      myconf:
+        key: value
+        keyWithoutValue: '!!!null'
+
+This would become:
+
+.. code:: ini
+
+    [myconf]
+    key=value
+    keyWithoutValue
 
 The filter can have the following parameters:
 

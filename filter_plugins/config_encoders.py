@@ -408,11 +408,14 @@ def encode_ini(
                 item = '""'
 
             if item is not None:
-                rv += "%s%s%s%s%s%s\n" % (
-                    indent, prop, delimiter, quote, _escape(item, quote),
-                    quote)
-            else:
-                rv += "%s%s\n" % (indent, prop)
+                if item == "!!!null":
+                    rv += "%s%s\n" % (indent, prop)
+                else:
+                    # Allow escaping, to print literal '!!!null'
+                    escaped_item = "!!!null" if item == "\!!!null" else item
+                    rv += "%s%s%s%s%s%s\n" % (
+                        indent, prop, delimiter, quote, _escape(escaped_item, quote),
+                        quote)
 
     # Then process all sections
     for section, props in sorted(data.items()):
