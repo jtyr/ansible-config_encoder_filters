@@ -411,10 +411,8 @@ def encode_ini(
                 if item == "!!!null":
                     rv += "%s%s\n" % (indent, prop)
                 else:
-                    # Allow escaping, to print literal '!!!null'
-                    escaped_item = "!!!null" if item == "\!!!null" else item
                     rv += "%s%s%s%s%s%s\n" % (
-                        indent, prop, delimiter, quote, _escape(escaped_item, quote),
+                        indent, prop, delimiter, quote, _escape(item, quote),
                         quote)
 
     # Then process all sections

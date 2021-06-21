@@ -121,6 +121,15 @@ class TestIni(MyTestCase):
     def test_mixed_ucase(self):
         self._test(['mixed', 'mixed_ucase'], ucase_prop=True)
 
+    def test_null_general(self):
+        self._test('null_general')
+
+    def test_null_section(self):
+        self._test('null_section')
+
+    def test_null_mixed(self):
+        self._test('null_mixed')
+
 
 class TestJson(MyTestCase):
     _encoder = 'encode_json'

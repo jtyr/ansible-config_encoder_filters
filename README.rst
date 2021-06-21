@@ -557,8 +557,6 @@ The output of such template would be:
 The special value :code:`!!!null` can be used, to create a key without any value.
 This must be wrapped in quotes, to avoid being evaluated as a YAML tag.
 
-To create a key with literal value :code:`!!!null`, the escape sequence :code:`\!!!null` can be used.
-
 Take the following data structure:
 
 .. code:: yaml

@@ -1,0 +1,9 @@
+var1: null
+var2:
+var3: '!!!null'
+var4: some text
+var5: 123
+var6: 987.654
+var7:
+  - yes
+  - "false"

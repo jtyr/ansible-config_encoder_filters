@@ -1,0 +1,9 @@
+section1:
+  var1: some text
+  var2: 123
+  var3: 987.654
+  var4: '!!!null'
+
+section2:
+  var5: yes
+  var6: "false"

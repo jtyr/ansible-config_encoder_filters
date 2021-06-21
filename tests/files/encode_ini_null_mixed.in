@@ -1,0 +1,6 @@
+var1: '!!!null'
+var2: abc
+
+section1:
+  var3: '!!!null'
+  var4: def
