@@ -408,9 +408,12 @@ def encode_ini(
                 item = '""'
 
             if item is not None:
-                rv += "%s%s%s%s%s%s\n" % (
-                    indent, prop, delimiter, quote, _escape(item, quote),
-                    quote)
+                if item == "!!!null":
+                    rv += "%s%s\n" % (indent, prop)
+                else:
+                    rv += "%s%s%s%s%s%s\n" % (
+                        indent, prop, delimiter, quote, _escape(item, quote),
+                        quote)
 
     # Then process all sections
     for section, props in sorted(data.items()):

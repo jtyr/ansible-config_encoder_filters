@@ -554,6 +554,26 @@ The output of such template would be:
     comment=ftp area
     path=/srv/ftp
 
+The special value :code:`!!!null` can be used, to create a key without any value.
+This must be wrapped in quotes, to avoid being evaluated as a YAML tag.
+
+Take the following data structure:
+
+.. code:: yaml
+
+    config:
+      myconf:
+        key: value
+        keyWithoutValue: '!!!null'
+
+This would become:
+
+.. code:: ini
+
+    [myconf]
+    key=value
+    keyWithoutValue
+
 The filter can have the following parameters:
 
 - ``comment="#"``
