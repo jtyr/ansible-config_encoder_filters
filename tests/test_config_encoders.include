@@ -21,6 +21,8 @@
           if item.encoder == 'encode_json' else
         myinput | encode_logstash(**item.params | default({}))
           if item.encoder == 'encode_logstash' else
+        myinput | encode_lua(**item.params | default({}))
+          if item.encoder == 'encode_lua' else
         myinput | encode_nginx(**item.params | default({}))
           if item.encoder == 'encode_nginx' else
         myinput | encode_pam(**item.params | default({}))

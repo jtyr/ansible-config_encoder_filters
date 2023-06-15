@@ -648,6 +648,75 @@ def encode_logstash(
     return rv
 
 
+def encode_lua(
+        data, convert_bools=False, convert_nums=False,
+        indent='    ', level=0, sort_keys=True):
+    """Convert Python data structure to Lua format."""
+
+    # Return value
+    rv = ""
+
+    if (
+            _is_num(data) or
+            (convert_nums and _str_is_num(data)) or
+            (convert_bools and _str_is_bool(data))):
+        # It's a number or boolean
+        rv += str(data).lower() + ";"
+
+    elif isinstance(data, string_types):
+        if data == 'null':
+            rv += "nil;"
+        else:
+            rv += '"%s";' % _escape(_escape(data), format="control")
+
+    elif isinstance(data, list):
+        rv += "{\n"
+
+        for val in data:
+            val = encode_lua(
+                val,
+                convert_bools=convert_bools,
+                convert_nums=convert_nums,
+                sort_keys=sort_keys,
+                indent=indent,
+                level=level + 1)
+            rv += "%s%s\n" % (indent*level, val)
+
+        rv += "%s}" % (indent*(level-1))
+
+        if level > 1:
+            rv += ";"
+
+    elif isinstance(data, dict):
+        if level > 0:
+            rv += "{\n"
+
+        if sort_keys:
+            items = sorted(data.items())
+        else:
+            items = data.items()
+        for key, val in items:
+            val = encode_lua(
+                val,
+                convert_bools=convert_bools,
+                convert_nums=convert_nums,
+                sort_keys=sort_keys,
+                indent=indent,
+                level=level + 1)
+            rv += "%s%s = %s\n" % (indent*level, key, val)
+
+        if level > 0:
+            rv += indent * (level - 1) + "}"
+
+            if level > 1:
+                rv += ";"
+    else:
+        raise errors.AnsibleFilterError(
+            "Unexpected data type: %s" % (type(data)))
+
+    return rv
+
+
 def encode_nginx(
         data, block_semicolon=False, indent="  ", level=0, semicolon=';',
         semicolon_ignore_postfix='!;'):
@@ -1163,6 +1232,7 @@ class FilterModule(object):
             'encode_ini': encode_ini,
             'encode_json': encode_json,
             'encode_logstash': encode_logstash,
+            'encode_lua': encode_lua,
             'encode_nginx': encode_nginx,
             'encode_pam': encode_pam,
             'encode_toml': encode_toml,

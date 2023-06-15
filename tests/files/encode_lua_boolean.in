@@ -1,0 +1,12 @@
+var1: yes
+var2: no
+var3: true
+var4: false
+var5: True
+var6: False
+var7: "yes"
+var8: "no"
+var9: "true"
+var10: "false"
+var11: "True"
+var12: "False"

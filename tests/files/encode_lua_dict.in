@@ -1,0 +1,12 @@
+var1:
+  aaa: bbb
+  ccc: 123
+  ddd: yes
+  eee:
+    fff: ggg
+    hhh:
+      iii: jjj
+      kkk: yes
+      lll:
+        - 987.654
+        - mmm
