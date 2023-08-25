@@ -22,6 +22,7 @@ Table of Contents
     - encode_ini_
     - encode_json_
     - encode_logstash_
+    - encode_lua_
     - encode_nginx_
     - encode_pam_
     - encode_toml_
@@ -825,6 +826,89 @@ The filter can have the following parameters:
 
   This parameter specifies which character will be used to identify the
   Logstash section.
+
+
+.. _encode-lua:
+
+encode_lua
+^^^^^^^^^^
+
+This filter helps to create configuration in a Lua friendly format.
+The expected data structure is the following:
+
+.. code:: yaml
+
+    my_lua_config:
+      fork: false
+      external_addresses:
+        - 1.2.3.4
+        - 5.6.7.8
+      admins:
+        - admin@example.com
+      contact_info:
+        abuse: abuse@example.com
+        admin: admin@example.com
+
+Lua is a small scripting language, often embedded into C/C++ applications.
+This encoder does a best effort to match configuration files seen in the wild,
+while allowing the user to further customize how the final output is rendered.
+
+The above variable can be used in the template file like this:
+
+.. code:: jinja2
+
+    {{ my_lua_config | encode_lua }}
+
+The output of such a template would be:
+
+.. code:: lua
+
+    fork = false;
+    external_addresses = {
+        "1.2.3.4";
+        "5.6.7.8";
+    }
+    admins = {
+        "admin@example.com";
+    }
+    contact_info = {
+        abuse = "abuse@example.com";
+        admin = "admin@example.com";
+    }
+
+The filter can have the following parameters:
+
+- ``convert_bools=false``
+
+  Indicates whether Boolean values presented as a string should be
+  converted to a real Boolean value. For example ``var1: 'True'`` would
+  be represented as a string but by using the ``convert_bools=true`` it
+  will be converted into Boolean like it would be defined like ``var1:
+  true``.
+
+- ``convert_nums=false``
+
+  Indicates whether number presented as a string should be converted to
+  number. For example ``var1: '123'`` would be represented as a string
+  but by using the ``convert_nums=true`` it will be converted it to a
+  number like it would be defined like ``var1: 123``. It's also possible
+  to use the YAML type casting to convert string to number (e.g. ``!!int
+  "1234"``, ``!!float "3.14"``).
+
+- ``sort_keys=false``
+
+  Indicates whether the keys should be sorted when the output is rendered,
+  or left to python's implicit handling of dict ordering.
+
+- ``indent="    "``
+
+  Defines the indentation unit.
+
+- ``level=0``
+
+  Indicates the initial level of the indentation. Value ``0`` starts
+  indenting from the beginning of the line. Setting the value to higher
+  than ``0`` indents the content by ``indent * level``.
 
 
 .. _encode-nginx:

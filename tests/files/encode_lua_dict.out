@@ -1,0 +1,16 @@
+var1 = {
+    aaa = "bbb";
+    ccc = 123;
+    ddd = true;
+    eee = {
+        fff = "ggg";
+        hhh = {
+            iii = "jjj";
+            kkk = true;
+            lll = {
+                987.654;
+                "mmm";
+            };
+        };
+    };
+}

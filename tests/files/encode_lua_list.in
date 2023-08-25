@@ -1,0 +1,12 @@
+var1:
+  - aaa
+  - 123
+
+var2:
+  - aaa
+  - bbb:
+      ccc: ddd
+      eee:
+       - fff
+       - ggg: hhh
+       - bool: yes
